@@ -12,3 +12,8 @@
 * ![#141416](https://via.placeholder.com/15/141416/141416.png) `#141416`
 * ![#ADFCF9](https://via.placeholder.com/15/ADFCF9/ADFCF9.png) `#ADFCF9`
 * ![#EBF0FF](https://via.placeholder.com/15/EBF0FF/EBF0FF.png) `#EBF0FF`
+
+## Tech Stack
+
+* Next.js --typescript
+* Vercel (deploy)
