@@ -3,6 +3,7 @@
 * https://codepen.io/acupoftee/pen/WNbBxXq
 * https://www.sliderrevolution.com/resources/css-text-animation/
 * https://dribbble.com/shots/16070488-The-Global-NFT-Summit-NFT-Ticket-Designs
+* https://codepen.io/AlexWarnes/pen/jXYYKL
 
 
 ## Color palette
