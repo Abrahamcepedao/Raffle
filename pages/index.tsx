@@ -1,9 +1,141 @@
 import type { NextPage } from 'next'
+
+/* React */
+import React, { useEffect, useState, useRef } from 'react'
+
+/* Components */
 import Head from 'next/head'
-import Image from 'next/image'
+import FileButton from '../components/FileButton'
 import styles from '../styles/Home.module.css'
 
+
+/* Redux */
+import { 
+  setDropDepth, 
+  setInDropZone, 
+} from "../redux/actions"
+import { selectDropDepth } from "../redux/states/file/reducer"
+import { useAppSelector, useAppDispatch } from '../redux/hooks'
+
 const Home: NextPage = () => {
+
+  const [file, setFile] = useState<File>();
+
+  /* useState - upload */
+  const [state, setState] = useState({
+    fileName: "",
+    loading: false,
+    error: "",
+    success: false,
+    step: 0,
+  });
+
+
+   /* Redux */
+  const dispatch = useAppDispatch(); //function that allows to trigger actions that update the redux state
+  /* redux - file */
+  const dropDepth = useAppSelector(selectDropDepth) //function that allows to get the dropDepth from the redux state
+
+  /* Functions - handle drag and drop */
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    dispatch(setDropDepth(dropDepth + 1)); //increase drop depth
+  };
+  
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    dispatch(setDropDepth(dropDepth - 1)); //decrease drop depth
+    if(dropDepth > 0) return //if drop depth is greater than 0, do nothing
+    dispatch(setInDropZone(false)); //set in drop zone to false
+  };
+  
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    e.dataTransfer.dropEffect = 'copy'; //allows drop
+    dispatch(setInDropZone(true)); //set in drop zone to true
+  };
+  
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    let files = e.dataTransfer.files; //get files
+  
+    if (files && files.length > 0) {
+      //const existingFiles = data.fileList.map(f => f.name)
+      //files = files.filter(f => !existingFiles.includes(f.name))
+      
+      var file = files[0];
+      console.log('file: ', file);
+
+      //validate file
+      if(file.type !== 'text/csv') {
+        setState({
+          ...state,
+          error: 'Only CSV files are allowed',
+          loading: false
+        });
+        console.log('error: ', 'Only CSV files are allowed');
+        return;
+      } else if(files.length > 1) {
+        setState({
+          ...state,
+          error: 'Only one file is allowed',
+          loading: false
+        });
+        console.log('error: ', 'Only one file is allowed');
+        return;
+      } else {
+        e.dataTransfer.clearData(); //clear data
+        dispatch(setDropDepth(0)); //reset drop depth to 0
+        dispatch(setInDropZone(false)); //reset in drop zone to false
+
+        setState({
+          ...state,
+          fileName: file.name,
+          error: "",
+          loading: true,
+        });
+        setFile(file);
+      }
+    }
+  };
+
+  /* Functions - handle file upload */
+  const uploadFile = (e:any) => {
+    console.log(e.target.files[0]);
+
+    let files = e.target.files; //get files
+    var file = files[0];
+
+    //validate file
+    if(file.type !== 'text/csv') {
+      setState({
+        ...state,
+        error: 'Only CSV files are allowed',
+        loading: false
+      });
+      console.log('error: ', 'Only CSV files are allowed');
+      return;
+    } else {
+
+      setState({
+        ...state,
+        fileName: file.name,
+        error: "",
+        loading: true,
+      });
+      setFile(file); //set file
+    }
+  };
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,58 +145,26 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <div className='circle'></div>
+        <div 
+          //className={styles.upload__drop
+          onDrop={e => handleDrop(e)}
+          onDragOver={e => handleDragOver(e)}
+          onDragEnter={e => handleDragEnter(e)}
+          onDragLeave={e => handleDragLeave(e)}
+        >
+          <div>
+            <h1>DRAG & DROP</h1>
+            <p>(XLSX)</p>
+          </div>
+          <div>
+            {/* icon */}
+          </div>
+          <div>
+            <FileButton uploadFile={uploadFile}/>
+          </div>
         </div>
       </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   )
 }
