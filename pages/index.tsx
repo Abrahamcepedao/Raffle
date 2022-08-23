@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 
 /* Components */
 import Head from 'next/head'
+import Link from 'next/link'
 import FileButton from '../components/FileButton'
 import styles from '../styles/Home.module.css'
 
@@ -16,10 +17,10 @@ import {
 } from "../redux/actions"
 import { selectDropDepth } from "../redux/states/file/reducer"
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import { Participant } from '../redux/states/participants/interfaces'
 
 /* Material UI */
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
@@ -38,8 +39,6 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 const Home: NextPage = () => {
 
-  const [file, setFile] = useState<File>();
-
   /* useState - upload */
   const [state, setState] = useState({
     fileName: "",
@@ -47,9 +46,11 @@ const Home: NextPage = () => {
     error: "",
     severity: "error",
     step: 0,
-    open: false
+    open: false,
   });
 
+  const [number, setNumber] = useState<number>(0);
+  const [intervalID, setIntervalID] = useState<number>(0);
 
    /* Redux */
   const dispatch = useAppDispatch(); //function that allows to trigger actions that update the redux state
@@ -127,8 +128,10 @@ const Home: NextPage = () => {
           loading: true,
           open: false,
           severity: "success",
+          step: 1
         });
-        setFile(file);
+
+        setParticipants(file);
       }
     }
   };
@@ -159,17 +162,8 @@ const Home: NextPage = () => {
         loading: true,
         open: true,
         severity: "success",
+        step: 1
       });
-      setFile(file); //set file
-
-      /* Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        //@ts-ignore
-        complete: function (results) {
-          console.log(results.data)
-        },
-      }); */
 
       setParticipants(file);
     }
@@ -186,6 +180,21 @@ const Home: NextPage = () => {
 
         //@ts-ignore
         dispatch(setReduxParticipants(results.data));
+
+        let num = 0;
+
+        const interval: any = setInterval(() => {
+            if(num === results.data.length) {
+              clearInterval(intervalID);
+            } else {
+              console.log('numParticipants: ', num);
+              num = num + 1;
+              setNumber(num);
+            }
+
+        }, 10)
+
+        setIntervalID(interval);
       },
     });
   }
@@ -215,32 +224,60 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <div className={styles.circle}></div>
-        <div 
-          className={styles.upload__drop}
-          onDrop={e => handleDrop(e)}
-          onDragOver={e => handleDragOver(e)}
-          onDragEnter={e => handleDragEnter(e)}
-          onDragLeave={e => handleDragLeave(e)}
-        >
 
-          {/* title */}
-          <div>
-            <h1 className={styles.title}>DRAG & DROP</h1>
-            <p className={styles.text}>(CSV)</p>
-          </div>
+        {state.step === 0 ? (
+              <div 
+                className={styles.upload__drop}
+                onDrop={e => handleDrop(e)}
+                onDragOver={e => handleDragOver(e)}
+                onDragEnter={e => handleDragEnter(e)}
+                onDragLeave={e => handleDragLeave(e)}
+              >
 
-          {/* icon */}
-          <div>
-            <FileUploadRoundedIcon className={styles.icon} />
-          </div>
+                {/* title */}
+                <div>
+                  <h1 className={styles.title}>DRAG & DROP</h1>
+                  <p className={styles.text}>(CSV)</p>
+                </div>
 
-          {/* button */}
-          <div>
-            <FileButton uploadFile={uploadFile}/>
-          </div>
+                {/* icon */}
+                <div>
+                  <FileUploadRoundedIcon className={styles.icon} />
+                </div>
 
-          {/*  */}
-        </div>
+                {/* button */}
+                <div>
+                  <FileButton uploadFile={uploadFile}/>
+                </div>
+
+                {/*  */}
+              </div>
+          ) : (
+            <div className={styles.upload__drop}>
+
+              {/* title */}
+              <div>
+                <h1 className={styles.title}>Beggin raffle</h1>
+              </div>
+
+              {/* icon */}
+              <div className={styles.icon__container}>
+                <PersonRoundedIcon className={styles.icon} />
+                <p>{number}</p>
+              </div>
+
+              {/* button */}
+              <div>
+                <Link href="/raffle">
+                  <button className={styles.start__button}><p>Start</p></button>
+                </Link>
+              </div>
+
+              {/*  */}
+            </div>
+        )}
+
+        
       </main>
 
       {/* alerts */}

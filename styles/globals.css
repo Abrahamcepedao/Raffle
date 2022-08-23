@@ -23,3 +23,8 @@ a {
     background: #141416;
   }
 }
+
+
+*::-webkit-scrollbar {
+  display: none;
+}

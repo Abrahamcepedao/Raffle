@@ -1,5 +1,5 @@
 /* Interface participants */
 export interface Participant {
-    name: string;
+    nombre: string;
     folio: string;
 }
