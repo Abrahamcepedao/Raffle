@@ -42,10 +42,43 @@
   font-size: 50px;
   margin-bottom: -15px;
 }
-.title, .text, .icon {
+.title, .text, .icon, .icon__container p {
   mix-blend-mode: overlay;
   opacity: 0.6;
 }
 .icon {
   font-size: 100px;
+}
+
+
+.icon__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.icon__container p {
+  margin: auto;
+  margin-left: 10px;
+  font-size: 80px;
+}
+
+.start__button {
+  padding: 10px 80px;
+  background: linear-gradient(90deg, #EB2D5F 0%, #8A374D 98.96%);
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+.start__button:hover {
+  transform: scale(1.1);
+}
+.start__button p {
+  mix-blend-mode: overlay;
+  linea-height: 15px;
+  font-size: 30px;
 }

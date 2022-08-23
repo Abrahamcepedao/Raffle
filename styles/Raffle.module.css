@@ -1,0 +1,130 @@
+.main {
+  min-height: 100vh;
+  padding: 4rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+
+/* outer circle */
+.outer__circle {
+    width: 650px;
+    height: 650px;
+    border-radius: 50%;
+    background: none;
+    position: absolute;
+    //top: 50%;
+    //left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    border: 1px solid #EB2D5F;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+    -webkit-animation: spin 1s linear 0s infinite;
+}
+.ball {
+    position: absolute;
+    top: -20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #EB2D5F;
+    box-shadow: 0px 0px 10px 10px rgba(235, 45, 95, 0.25);
+    filter: blur(10px);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0);
+  }
+  to{
+    transform: rotate(359deg);
+  }
+}
+
+
+/* inner circle */
+.circle {
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #EB2D5F 0%, #0E33DC 100%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+
+/* card */
+.card__container {
+    z-index: 10;
+    width: 300px;
+    height: 450px;
+    padding: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.01);
+    box-shadow: -10px 10px 50px 10px rgba(63, 59, 234, 0.25), 10px -10px 50px 10px rgba(241, 44, 115, 0.5), inset 0px 39px 55px -36px rgba(255, 255, 255, 0.5), inset 0px 7px 11px -4px #FFFFFF, inset 0px -82px 68px -64px rgba(96, 68, 144, 0.3), inset 0px 95px 100px -48px rgba(202, 204, 255, 0.3), inset 0px 4px 16px rgba(154, 146, 210, 0.3), inset 0px 1px 0px rgba(227, 222, 255, 0.2);
+    backdrop-filter: blur(100px);
+    /* Note: backdrop-filter has minimal browser support */
+    border-radius: 10px;
+    text-align: center;
+}
+.winner__title {
+    font-size: 50px;
+}
+
+.name, .folio {
+    mix-blend-mode: overlay;
+    opacity: 0.6;
+}
+.name {
+    font-size: 50px;
+}
+.folio {
+    font-size: 35px;
+}
+
+
+/* actions container */
+.actions__container {
+    position: absolute;
+    bottom: 10px;
+    width: 650px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.person__icon {
+  font-size: 100px;
+}
+.person__icon, .icon__container p, .icon {
+  color: rgba(235, 45, 95, 0.5);
+}
+.icon__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.icon__container p {
+  margin: auto;
+  margin-left: 10px;
+  font-size: 80px;
+}
+
+.icon {
+    font-size: 40px;
+}

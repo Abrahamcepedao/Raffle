@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 
 /* Components */
 import Head from 'next/head'
+import Link from 'next/link'
 import FileButton from '../components/FileButton'
 import styles from '../styles/Home.module.css'
 
@@ -12,12 +13,14 @@ import styles from '../styles/Home.module.css'
 import { 
   setDropDepth, 
   setInDropZone, 
+  setReduxParticipants,
 } from "../redux/actions"
 import { selectDropDepth } from "../redux/states/file/reducer"
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 
 /* Material UI */
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
@@ -36,18 +39,18 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 const Home: NextPage = () => {
 
-  const [file, setFile] = useState<File>();
-
   /* useState - upload */
   const [state, setState] = useState({
     fileName: "",
     loading: false,
     error: "",
-    success: false,
+    severity: "error",
     step: 0,
-    open: false
+    open: false,
   });
 
+  const [number, setNumber] = useState<number>(0);
+  const [intervalID, setIntervalID] = useState<number>(0);
 
    /* Redux */
   const dispatch = useAppDispatch(); //function that allows to trigger actions that update the redux state
@@ -97,7 +100,9 @@ const Home: NextPage = () => {
         setState({
           ...state,
           error: 'Only CSV files are allowed',
-          loading: false
+          loading: false,
+          open: true,
+          severity: 'error'
         });
         console.log('error: ', 'Only CSV files are allowed');
         return;
@@ -105,7 +110,9 @@ const Home: NextPage = () => {
         setState({
           ...state,
           error: 'Only one file is allowed',
-          loading: false
+          loading: false,
+          open: true,
+          severity: 'error'
         });
         console.log('error: ', 'Only one file is allowed');
         return;
@@ -119,8 +126,12 @@ const Home: NextPage = () => {
           fileName: file.name,
           error: "",
           loading: true,
+          open: false,
+          severity: "success",
+          step: 1
         });
-        setFile(file);
+
+        setParticipants(file);
       }
     }
   };
@@ -138,7 +149,8 @@ const Home: NextPage = () => {
         ...state,
         error: 'Only CSV files are allowed',
         loading: false,
-        open: true
+        open: true,
+        severity: 'error'
       });
       return;
     } else {
@@ -148,20 +160,44 @@ const Home: NextPage = () => {
         fileName: file.name,
         error: "File uploaded",
         loading: true,
-        open: true
+        open: true,
+        severity: "success",
+        step: 1
       });
-      setFile(file); //set file
 
-      Papa.parse(file, {
-        header: true,
-        skipEmptyLines: true,
-        //@ts-ignore
-        complete: function (results) {
-          console.log(results.data)
-        },
-      });
+      setParticipants(file);
     }
   };
+
+  /* Set participants data in redux */
+  const setParticipants = (file: File) => {
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      //@ts-ignore
+      complete: function (results) {
+        console.log(results.data)
+
+        //@ts-ignore
+        dispatch(setReduxParticipants(results.data));
+
+        let num = 0;
+
+        const interval: any = setInterval(() => {
+            if(num === results.data.length) {
+              clearInterval(intervalID);
+            } else {
+              console.log('numParticipants: ', num);
+              num = num + 1;
+              setNumber(num);
+            }
+
+        }, 10)
+
+        setIntervalID(interval);
+      },
+    });
+  }
 
 
   /* Alert messages functions */
@@ -188,29 +224,66 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <div className={styles.circle}></div>
-        <div 
-          className={styles.upload__drop}
-          onDrop={e => handleDrop(e)}
-          onDragOver={e => handleDragOver(e)}
-          onDragEnter={e => handleDragEnter(e)}
-          onDragLeave={e => handleDragLeave(e)}
-        >
-          <div>
-            <h1 className={styles.title}>DRAG & DROP</h1>
-            <p className={styles.text}>(CSV)</p>
-          </div>
-          <div>
-            <FileUploadRoundedIcon className={styles.icon} />
-          </div>
-          <div>
-            <FileButton uploadFile={uploadFile}/>
-          </div>
-        </div>
+
+        {state.step === 0 ? (
+              <div 
+                className={styles.upload__drop}
+                onDrop={e => handleDrop(e)}
+                onDragOver={e => handleDragOver(e)}
+                onDragEnter={e => handleDragEnter(e)}
+                onDragLeave={e => handleDragLeave(e)}
+              >
+
+                {/* title */}
+                <div>
+                  <h1 className={styles.title}>DRAG & DROP</h1>
+                  <p className={styles.text}>(CSV)</p>
+                </div>
+
+                {/* icon */}
+                <div>
+                  <FileUploadRoundedIcon className={styles.icon} />
+                </div>
+
+                {/* button */}
+                <div>
+                  <FileButton uploadFile={uploadFile}/>
+                </div>
+
+                {/*  */}
+              </div>
+          ) : (
+            <div className={styles.upload__drop}>
+
+              {/* title */}
+              <div>
+                <h1 className={styles.title}>Beggin raffle</h1>
+              </div>
+
+              {/* icon */}
+              <div className={styles.icon__container}>
+                <PersonRoundedIcon className={styles.icon} />
+                <p>{number}</p>
+              </div>
+
+              {/* button */}
+              <div>
+                <Link href="/raffle">
+                  <button className={styles.start__button}><p>Start</p></button>
+                </Link>
+              </div>
+
+              {/*  */}
+            </div>
+        )}
+
+        
       </main>
 
       {/* alerts */}
        <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+
+        <Alert onClose={handleClose} severity={state.severity === "error" ? "error" : "success"} sx={{ width: '100%' }}>
           {state.error}
         </Alert>
       </Snackbar>
