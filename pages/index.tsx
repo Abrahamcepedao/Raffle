@@ -12,9 +12,11 @@ import styles from '../styles/Home.module.css'
 import { 
   setDropDepth, 
   setInDropZone, 
+  setReduxParticipants,
 } from "../redux/actions"
 import { selectDropDepth } from "../redux/states/file/reducer"
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
+import { Participant } from '../redux/states/participants/interfaces'
 
 /* Material UI */
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
@@ -43,7 +45,7 @@ const Home: NextPage = () => {
     fileName: "",
     loading: false,
     error: "",
-    success: false,
+    severity: "error",
     step: 0,
     open: false
   });
@@ -97,7 +99,9 @@ const Home: NextPage = () => {
         setState({
           ...state,
           error: 'Only CSV files are allowed',
-          loading: false
+          loading: false,
+          open: true,
+          severity: 'error'
         });
         console.log('error: ', 'Only CSV files are allowed');
         return;
@@ -105,7 +109,9 @@ const Home: NextPage = () => {
         setState({
           ...state,
           error: 'Only one file is allowed',
-          loading: false
+          loading: false,
+          open: true,
+          severity: 'error'
         });
         console.log('error: ', 'Only one file is allowed');
         return;
@@ -119,6 +125,8 @@ const Home: NextPage = () => {
           fileName: file.name,
           error: "",
           loading: true,
+          open: false,
+          severity: "success",
         });
         setFile(file);
       }
@@ -138,7 +146,8 @@ const Home: NextPage = () => {
         ...state,
         error: 'Only CSV files are allowed',
         loading: false,
-        open: true
+        open: true,
+        severity: 'error'
       });
       return;
     } else {
@@ -148,20 +157,38 @@ const Home: NextPage = () => {
         fileName: file.name,
         error: "File uploaded",
         loading: true,
-        open: true
+        open: true,
+        severity: "success",
       });
       setFile(file); //set file
 
-      Papa.parse(file, {
+      /* Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
         //@ts-ignore
         complete: function (results) {
           console.log(results.data)
         },
-      });
+      }); */
+
+      setParticipants(file);
     }
   };
+
+  /* Set participants data in redux */
+  const setParticipants = (file: File) => {
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      //@ts-ignore
+      complete: function (results) {
+        console.log(results.data)
+
+        //@ts-ignore
+        dispatch(setReduxParticipants(results.data));
+      },
+    });
+  }
 
 
   /* Alert messages functions */
@@ -195,22 +222,31 @@ const Home: NextPage = () => {
           onDragEnter={e => handleDragEnter(e)}
           onDragLeave={e => handleDragLeave(e)}
         >
+
+          {/* title */}
           <div>
             <h1 className={styles.title}>DRAG & DROP</h1>
             <p className={styles.text}>(CSV)</p>
           </div>
+
+          {/* icon */}
           <div>
             <FileUploadRoundedIcon className={styles.icon} />
           </div>
+
+          {/* button */}
           <div>
             <FileButton uploadFile={uploadFile}/>
           </div>
+
+          {/*  */}
         </div>
       </main>
 
       {/* alerts */}
        <Snackbar open={state.open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+
+        <Alert onClose={handleClose} severity={state.severity === "error" ? "error" : "success"} sx={{ width: '100%' }}>
           {state.error}
         </Alert>
       </Snackbar>
