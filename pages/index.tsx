@@ -187,7 +187,7 @@ const Home: NextPage = () => {
             if(num === results.data.length) {
               clearInterval(intervalID);
             } else {
-              console.log('numParticipants: ', num);
+              //console.log('numParticipants: ', num);
               num = num + 1;
               setNumber(num);
             }
@@ -236,8 +236,8 @@ const Home: NextPage = () => {
 
                 {/* title */}
                 <div>
-                  <h1 className={styles.title}>DRAG & DROP</h1>
-                  <p className={styles.text}>(CSV)</p>
+                  <h1 className={styles.title}>ARRASTRA Y SUELTA</h1>
+                  <p className={styles.text}>(.XLSX)</p>
                 </div>
 
                 {/* icon */}
@@ -257,7 +257,7 @@ const Home: NextPage = () => {
 
               {/* title */}
               <div>
-                <h1 className={styles.title}>Beggin raffle</h1>
+                <h1 className={styles.title}>COMENZAR RIFA</h1>
               </div>
 
               {/* icon */}
@@ -268,8 +268,8 @@ const Home: NextPage = () => {
 
               {/* button */}
               <div>
-                <Link href="/raffle">
-                  <button className={styles.start__button}><p>Start</p></button>
+                <Link href="/raffle">S
+                  <button className={styles.start__button}><p>COMENZAR</p></button>
                 </Link>
               </div>
 

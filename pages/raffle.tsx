@@ -6,6 +6,11 @@ import React, { useState, useEffect } from 'react'
 /* Components */
 import Head from 'next/head'
 import styles from '../styles/Raffle.module.css'
+import Image from 'next/image'
+import Logo from '../public/img/mobil_logo.png'
+import Image1 from '../public/img/mobil1.png'
+import Image2 from '../public/img/mobil2.png'
+
 
 /* Redux */
 import { 
@@ -21,9 +26,6 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ReplayCircleFilledRoundedIcon from '@mui/icons-material/ReplayCircleFilledRounded';
 
-/* Papaparse */
-import Papa from "papaparse";
-
 
 const Raffle: NextPage = () => {
 
@@ -37,6 +39,7 @@ const Raffle: NextPage = () => {
     const [folio, setFolio] = useState<string>("--");
 
     const [intervalID, setIntervalID] = useState<number>(0);
+    const [slow, setSlow] = useState<boolean>(false);
 
     /* Redux */
     const dispatch = useAppDispatch(); //function that allows to trigger actions that update the redux state
@@ -62,36 +65,119 @@ const Raffle: NextPage = () => {
         return array;
     }
 
-    
+    let index = 0;
+    let num = 0;
+    let stop = false;
+    //@ts-ignore
+    let interval;
+    let final = Math.floor(Math.random() * participants.length) + (participants.length * 3);
 
-    useEffect(() => {
 
-        if (participants.length > 0) {
-            let index = 0;
-            let num = 0;
+    const slowInterval = (temp:Participant[]) => {
 
-            let temp: Participant[] = shuffle(participants);
-
-            const interval: any = setInterval(() => {
-                if(num === 10) {
-                    clearInterval(intervalID);
+        //@ts-ignore
+        if (interval) {
+            clearInterval(interval)
+            interval = null
+        }
+        stop = false;
+        
+        interval = setInterval(() => {
+            if(!stop){
+                console.log('numm: ', num, " index: ", index);
+                num = num + 1;
+                if(num === final) {
+                    console.log("stop");
                     setState({...state, winnerStatus: 1, winnerFolio: temp[index].folio});
+                    stop = true;
+                    clearInterval(intervalID);
+                    //@ts-ignore
+                    clearInterval(interval);
+                    interval = null;
                 } else if(index < (participants.length-2)) {
-                    console.log('numParticipants: ', num);
                     index = index + 1;
                     setName(temp[index].nombre);
                     setFolio(temp[index].folio);
                 } else {
-                    num = num + 1;
                     index = index + 1;
                     setName(temp[index].nombre);
                     setFolio(temp[index].folio);
                     index = 0;
                 }
+            } else {
+                //@ts-ignore
+                clearInterval(interval);
+            }
 
-            }, 10)
+        }, 2000)
 
-            setIntervalID(interval);
+        //@ts-ignore
+        setIntervalID(interval);
+    }
+    
+    const runInterval = (time:number) => {
+        //@ts-ignore
+        if (interval) {
+            clearInterval(interval)
+            interval = null
+        }
+        console.log("final: " + final);
+
+        let temp: Participant[] = shuffle(participants);
+        //let temp: Participant[] = participants;
+        console.log("time: ", time);
+       
+
+        interval = setInterval(() => {
+            if(!stop){
+                console.log('num: ', num, " index: ", index);
+                num = num + 1;
+                if(num === (final - 5))  {
+                    console.log("slow");
+                    /* 
+                    index = index + 1;
+                    setName(temp[index].nombre);
+                    setFolio(temp[index].folio); */
+                    setSlow(true);
+                    stop = true;
+
+                    clearInterval(intervalID);
+                    //@ts-ignore
+                    clearInterval(interval);
+                    interval = null;
+                    slowInterval(temp);
+                }
+                else if(index < (participants.length-2)) {
+                    index = index + 1;
+                    setName(temp[index].nombre);
+                    setFolio(temp[index].folio);
+                } else {
+                    index = index + 1;
+                    setName(temp[index].nombre);
+                    setFolio(temp[index].folio);
+                    index = 0;
+                }
+            } else {
+                //@ts-ignore
+                clearInterval(interval);
+                interval = null;
+            }
+
+        }, time)
+
+       /*  if(stop) {
+            slowInterval(temp);
+        } */
+        //setIntervalID(interval);
+    }
+    
+
+    useEffect(() => {
+
+        if (participants.length > 0) {
+            
+            runInterval(100);
+            
        
         }
 
@@ -111,60 +197,78 @@ const Raffle: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        {/* outer circle */}
-        <div className={styles.outer__circle}>
-            <div className={styles.ball}></div>
-        </div>
+        <div className={styles.overlay}>
+            {/* outer circle */}
+            <div className={slow ? styles.outer__circle2 : styles.outer__circle}>
+                <div className={styles.ball}></div>
+            </div>
 
-        {/* inner circle */}
-        <div className={styles.circle}></div>
+            {/* inner circle */}
+            <div className={styles.circle}></div>
 
-        {/* Card */}
-        <div className={styles.card__container}>
-            <div>
-                {/* Winner title */}
-                {state.winnerStatus === 1 && (
-                    <h2 className={styles.winner__title}>Winner!!</h2>
+            {/* Card */}
+            <div className={styles.card__container}>
+                <div>
+                    {/* Winner title */}
+                    {state.winnerStatus === 1 && (
+                        <h2 className={styles.winner__title}>¡Ganador!</h2>
+                    )}
+
+                    {/* name */}
+                    <h1 className={styles.name}>{name.toUpperCase()}</h1>
+
+                    {/* Folio */}
+                    <h2 className={styles.folio}>{folio}</h2>
+                    <p className={styles.folio2}>FOLIO</p>
+                </div>
+            </div>
+
+            {/* Participants and buttons */}
+            <div className={styles.actions__container}>
+                {/* participants number */}
+                <div className={styles.icon__container}>
+                    <PersonRoundedIcon className={styles.person__icon} />
+                    <p className={styles.participants}>{participants.length ? participants.length : "0"}</p>
+                </div>
+
+                {/* action buttons */}
+                {state.winnerStatus === 0 && (
+                    <div className={styles.buttons}>
+
+                        {/* Replay deleting winner */}
+                        <Tooltip title="Replay" placement="top">
+                            <IconButton onClick={handleReplayClick}>
+                                <ReplayCircleFilledRoundedIcon className={styles.icon} />
+                            </IconButton>
+                        </Tooltip>
+
+                        {/* Do anothe raffle */}
+                        <Tooltip title="Do another" placement="top">
+                            <IconButton>
+                                <ReplayCircleFilledRoundedIcon className={styles.icon} />
+                            </IconButton>
+                        </Tooltip>
+                    </div>    
                 )}
+                
+            </div>
 
-                {/* name */}
-                <h1 className={styles.name}>{name}</h1>
+            {/* Logo image */}
+            <div className={styles.logo__container}>
+                <Image src={Logo} width={100} height={30}/>
+            </div>
 
-                {/* Folio */}
-                <h2 className={styles.folio}>{folio}</h2>
+            {/* Image 1 */}
+            <div className={styles.image__container1}>
+                <Image src={Image1} width={400} height={200}/>
+            </div>
+
+            {/* Image 2 */}
+            <div className={styles.image__container2}>
+                <Image src={Image2} width={300} height={200}/>
             </div>
         </div>
 
-        {/* Participants and buttons */}
-        <div className={styles.actions__container}>
-            {/* participants number */}
-            <div className={styles.icon__container}>
-                <PersonRoundedIcon className={styles.person__icon} />
-                <p className={styles.participants}>{participants.length ? participants.length : "0"}</p>
-            </div>
-
-            {/* action buttons */}
-            {state.winnerStatus === 1 && (
-                <div className={styles.buttons}>
-
-                    {/* Replay deleting winner */}
-                    <Tooltip title="Replay" placement="top">
-                        <IconButton onClick={handleReplayClick}>
-                            <ReplayCircleFilledRoundedIcon className={styles.icon} />
-                        </IconButton>
-                    </Tooltip>
-
-                    {/* Do anothe raffle */}
-                    <Tooltip title="Do another" placement="top">
-                        <IconButton>
-                            <ReplayCircleFilledRoundedIcon className={styles.icon} />
-                        </IconButton>
-                    </Tooltip>
-                </div>    
-            )}
-            
-        </div>
-        
       </main>
 
     </div>
