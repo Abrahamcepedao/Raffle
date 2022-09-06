@@ -1,0 +1,24 @@
+/* File button */
+.input {
+    opacity: 0;
+    width: 0px;
+}
+
+.button {
+    margin: auto;
+    font-size: 15px;
+    color: black;
+    padding: 10px;
+    border-radius: 10px;
+    background: #D92F2B;
+    border: none;
+    cursor: pointer;
+}
+
+.text {
+    margin: auto;
+    line-height: 25px;
+    font-size: 22px;
+    color: white;
+    font-style: italic;
+}

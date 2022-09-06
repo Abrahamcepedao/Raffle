@@ -38,6 +38,10 @@
   font-style: italic;
 }
 
+.margin__div, .icon__container {
+  margin-bottom: 50px;
+}
+
 .title {
   font-size: 50px;
   margin-bottom: -15px;
@@ -58,7 +62,6 @@
   align-items: center;
   flex-direction: row;
   margin-top: 30px;
-  margin-bottom: 30px;
 }
 
 .icon__container p {
@@ -68,8 +71,8 @@
 }
 
 .start__button {
-  padding: 10px 80px;
-  background: linear-gradient(90deg, #EB2D5F 0%, #8A374D 98.96%);
+  padding: 10px 10px;
+  background: #D92F2B;
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -79,9 +82,9 @@
   transform: scale(1.1);
 }
 .start__button p {
-  mix-blend-mode: overlay;
-  linea-height: 15px;
+  line-height: 30px;
   font-size: 30px;
+  margin: auto;
 }
 
 
