@@ -8,6 +8,10 @@ import Head from 'next/head'
 import Link from 'next/link'
 import FileButton from '../components/FileButton'
 import styles from '../styles/Home.module.css'
+import Image from 'next/image'
+import Logo from '../public/img/mobil_logo.png'
+import Image1 from '../public/img/mobil1.png'
+import Image2 from '../public/img/mobil2.png'
 
 /* Redux */
 import { 
@@ -223,61 +227,77 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <div className={styles.circle}></div>
+        <div className={styles.overlay}>
 
-        {state.step === 0 ? (
-              <div 
-                className={styles.upload__drop}
-                onDrop={e => handleDrop(e)}
-                onDragOver={e => handleDragOver(e)}
-                onDragEnter={e => handleDragEnter(e)}
-                onDragLeave={e => handleDragLeave(e)}
-              >
+          {state.step === 0 ? (
+                <div 
+                  className={styles.upload__drop}
+                  onDrop={e => handleDrop(e)}
+                  onDragOver={e => handleDragOver(e)}
+                  onDragEnter={e => handleDragEnter(e)}
+                  onDragLeave={e => handleDragLeave(e)}
+                >
+
+                  {/* title */}
+                  <div style={{marginBottom: '50px'}}>
+                    <h1 className={styles.title}>ARRASTRA Y SUELTA</h1>
+                    <p className={styles.text}>(.XLSX)</p>
+                  </div>
+
+                  {/* icon */}
+                  <div style={{marginBottom: '50px'}}>
+                    <FileUploadRoundedIcon className={styles.icon} />
+                  </div>
+
+                  {/* button */}
+                  <div>
+                    <FileButton uploadFile={uploadFile}/>
+                  </div>
+
+                  {/*  */}
+                </div>
+            ) : (
+              <div className={styles.upload__drop}>
 
                 {/* title */}
                 <div>
-                  <h1 className={styles.title}>ARRASTRA Y SUELTA</h1>
-                  <p className={styles.text}>(.XLSX)</p>
+                  <h1 className={styles.title}>COMENZAR RIFA</h1>
                 </div>
 
                 {/* icon */}
-                <div>
-                  <FileUploadRoundedIcon className={styles.icon} />
+                <div className={styles.icon__container}>
+                  <PersonRoundedIcon className={styles.icon} />
+                  <p>{number}</p>
                 </div>
 
                 {/* button */}
                 <div>
-                  <FileButton uploadFile={uploadFile}/>
+                  <Link href="/raffle">
+                    <button className={styles.start__button}><p>COMENZAR</p></button>
+                  </Link>
                 </div>
 
                 {/*  */}
               </div>
-          ) : (
-            <div className={styles.upload__drop}>
+          )}
 
-              {/* title */}
-              <div>
-                <h1 className={styles.title}>COMENZAR RIFA</h1>
-              </div>
 
-              {/* icon */}
-              <div className={styles.icon__container}>
-                <PersonRoundedIcon className={styles.icon} />
-                <p>{number}</p>
-              </div>
+          {/* Logo image */}
+          <div className={styles.logo__container}>
+              <Image src={Logo} width={100} height={30}/>
+          </div>
 
-              {/* button */}
-              <div>
-                <Link href="/raffle">S
-                  <button className={styles.start__button}><p>COMENZAR</p></button>
-                </Link>
-              </div>
+          {/* Image 1 */}
+          <div className={styles.image__container1}>
+              <Image src={Image1} width={400} height={200}/>
+          </div>
 
-              {/*  */}
-            </div>
-        )}
+          {/* Image 2 */}
+          <div className={styles.image__container2}>
+              <Image src={Image2} width={300} height={200}/>
+          </div>
 
-        
+        </div>
       </main>
 
       {/* alerts */}

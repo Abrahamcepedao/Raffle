@@ -50,13 +50,13 @@
             inset 0 0 1rem #08f
 }
 .outer__circle {
-  -webkit-animation: spin 500ms linear 0s infinite;
+  //-webkit-animation: spin 500ms linear 0s infinite;
 }
 .outer__circle2 {
   //top: 50%;
   //left: 50%;
-  -webkit-animation: spin 10s linear 0s;
-  animation-iteration-count: 2;
+  //-webkit-animation: spin 10s linear 0s;
+  //animation-iteration-count: 3;
 }
 
 .ball {
