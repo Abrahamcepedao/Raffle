@@ -27,14 +27,21 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ReplayCircleFilledRoundedIcon from '@mui/icons-material/ReplayCircleFilledRounded';
 
 
+/* Motion */
+import { motion } from "framer-motion"
+
 const Raffle: NextPage = () => {
 
     /* useState - upload */
     const [state, setState] = useState({
         winnerStatus: 0,
         winnerFolio: "",
+        winners: 0,
+        animationIteration: 2,
+        numParticipants: 0,
     });
 
+    const [deletedFolios, setDeletedFolios] = useState<Array<string>>([]);
     const [name, setName] = useState<string>("--");
     const [folio, setFolio] = useState<string>("--");
 
@@ -88,13 +95,14 @@ const Raffle: NextPage = () => {
                 num = num + 1;
                 if(num === final) {
                     console.log("stop");
-                    setState({...state, winnerStatus: 1, winnerFolio: temp[index].folio});
+                    console.log("winners: ", state.winners);
+                    setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFolio: temp[index].folio});
                     stop = true;
                     clearInterval(intervalID);
                     //@ts-ignore
                     clearInterval(interval);
                     interval = null;
-                } else if(index < (participants.length-2)) {
+                } else if(index < (temp.length-2)) {
                     index = index + 1;
                     setName(temp[index].nombre);
                     setFolio(temp[index].folio);
@@ -123,7 +131,18 @@ const Raffle: NextPage = () => {
         }
         console.log("final: " + final);
 
-        let temp: Participant[] = shuffle(participants);
+        let temp: Participant[] = participants;
+
+        if(localStorage.getItem("deletedFolios") !== null) {
+            let deletedFolios = JSON.parse(localStorage.getItem("deletedFolios")!);
+            temp = temp.filter((item:Participant) => !deletedFolios.includes(item.folio));
+            console.log(temp);
+        }  
+        
+        
+
+        //@ts-ignore
+        temp = shuffle(temp);
         //let temp: Participant[] = participants;
         console.log("time: ", time);
        
@@ -147,7 +166,7 @@ const Raffle: NextPage = () => {
                     interval = null;
                     slowInterval(temp);
                 }
-                else if(index < (participants.length-2)) {
+                else if(index < (temp.length-2)) {
                     index = index + 1;
                     setName(temp[index].nombre);
                     setFolio(temp[index].folio);
@@ -165,27 +184,54 @@ const Raffle: NextPage = () => {
 
         }, time)
 
-       /*  if(stop) {
-            slowInterval(temp);
-        } */
-        //setIntervalID(interval);
     }
     
 
     useEffect(() => {
 
         if (participants.length > 0) {
-            
+            localStorage.setItem("deletedFolios", JSON.stringify([]));
+            setState({...state, numParticipants: participants.length});
             runInterval(100);
-            
-       
         }
 
     } ,[]);
 
-    const handleReplayClick = () => {
+    /* Handle replay raffle without winner */
+    const handleReplayClick = async () => {
         //delete winner from participants
-        //let temp = participants.filter(participant => participant.folio !== state.winnerFolio);
+
+        //let temp = participants.filter((participant: Participant) => participant.folio !== state.winnerFolio);
+        if(localStorage.getItem("deletedFolios") !== null) {
+            let temp = JSON.parse(localStorage.getItem("deletedFolios")!);
+            temp.push(state.winnerFolio);
+            localStorage.setItem("deletedFolios", JSON.stringify(temp));
+        } else {
+            localStorage.setItem("deletedFolios", JSON.stringify([state.winnerFolio]));
+        }
+        
+        setState({...state, winnerStatus: 0, winnerFolio: "", numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 3});
+        setSlow(false);
+        runInterval(100);
+    }
+
+
+    const variants = {
+
+        fast: {
+            rotate: [0, 360],
+            transition: {
+                duration: 0.5,
+                repeat: Infinity,
+                ease: "linear",
+            }},
+        slow: {
+            rotate: [0, 360], 
+            transition: {
+                duration: 10,
+                repeat: 0,
+                ease: "linear",
+            }},
     }
   
   return (
@@ -199,9 +245,20 @@ const Raffle: NextPage = () => {
       <main className={styles.main}>
         <div className={styles.overlay}>
             {/* outer circle */}
-            <div className={slow ? styles.outer__circle2 : styles.outer__circle}>
+            <motion.div className={slow ? styles.outer__circle2 : styles.outer__circle} style={{animationIterationCount: !slow ? 'infinite': state.animationIteration}}
+                /* animate={{
+                    //scale: [1, 2, 2, 1, 1],
+                    rotate: [0, 360],
+                    //borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+                }} */
+                animate={slow ? "slow" : "fast"}
+                variants={variants}
+                //infinite durationn
+
+
+            >
                 <div className={styles.ball}></div>
-            </div>
+            </motion.div>
 
             {/* inner circle */}
             <div className={styles.circle}></div>
@@ -228,15 +285,15 @@ const Raffle: NextPage = () => {
                 {/* participants number */}
                 <div className={styles.icon__container}>
                     <PersonRoundedIcon className={styles.person__icon} />
-                    <p className={styles.participants}>{participants.length ? participants.length : "0"}</p>
+                    <p className={styles.participants}>{state.numParticipants ? state.numParticipants : "--"}</p>
                 </div>
 
                 {/* action buttons */}
-                {state.winnerStatus === 0 && (
+                {state.winnerStatus === 1 && (
                     <div className={styles.buttons}>
 
                         {/* Replay deleting winner */}
-                        <Tooltip title="Replay" placement="top">
+                        <Tooltip title="Replay without winner" placement="top">
                             <IconButton onClick={handleReplayClick}>
                                 <ReplayCircleFilledRoundedIcon className={styles.icon} />
                             </IconButton>
