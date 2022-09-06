@@ -1,5 +1,8 @@
 import { useRef } from "react";
 
+/* CSS */
+import styles from '../styles/Components.module.css'
+
 export default function FileBtn({uploadFile}) {
   const fileUpload = useRef(null);
 
@@ -13,11 +16,12 @@ export default function FileBtn({uploadFile}) {
         type="file"
         ref={fileUpload}
         onChange={uploadFile}
-        style={{ opacity: "0", width: '0px' }}
+        className={styles.input}
       />
-      <button onClick={() => handleUpload()}
-        style={{margin: 'auto', fontSize: "15px", color: "black", padding: "10px", borderRadius: "10px", background: "#D92F2B", border: "none", cursor: "pointer"}}
-        ><p style={{margin: 'auto', lineHeight: '25px', fontSize: '22px', color: 'white', fontStyle: 'italic'}}>SELECCIONAR ARCHIVO</p>
+      <button onClick={() => handleUpload()} className={styles.button}>
+          <p className={styles.text}>
+            SELECCIONAR ARCHIVO
+          </p>
       </button>
     </div>
   );

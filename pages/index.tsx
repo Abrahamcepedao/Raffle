@@ -7,7 +7,6 @@ import React, { useState } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import FileButton from '../components/FileButton'
-import styles from '../styles/Home.module.css'
 import Image from 'next/image'
 import Logo from '../public/img/mobil_logo.png'
 import Image1 from '../public/img/mobil1.png'
@@ -28,6 +27,11 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
+/* CSS */
+import styles from '../styles/Home.module.css'
+
+/* XLSX */
+import readXlsxFile from 'read-excel-file'
 
 /* Papaparse */
 import Papa from "papaparse";
@@ -141,7 +145,7 @@ const Home: NextPage = () => {
   };
 
   /* Functions - handle file upload */
-  const uploadFile = (e:any) => {
+  const uploadFile = async(e:any) => {
     console.log(e.target.files[0]);
 
     let files = e.target.files; //get files
@@ -149,20 +153,58 @@ const Home: NextPage = () => {
 
     //validate file
     if(file.type !== 'text/csv') {
-      setState({
-        ...state,
-        error: 'Only CSV files are allowed',
-        loading: false,
-        open: true,
-        severity: 'error'
+      const schema = {
+        'nombre': {
+          prop: 'nombre',
+          type: String,
+          required: true
+        },
+        'folio': {
+          prop: 'folio',
+          type: String,
+          required: true
+        }
+      }
+
+
+      readXlsxFile(file, {schema}).then((rows) => {
+        console.log('rows: ', rows);
+
+        setState({
+          ...state,
+          fileName: file.name,
+          error: "Archivo cargado correctamente",
+          loading: true,
+          open: true,
+          severity: "success",
+          step: 1
+        });
+
+        if(rows.rows.length > 0) {
+          //@ts-ignore
+          setParticipantsWithoutFile(rows.rows);
+        }
+        //return rows;
+      }).catch((error) => {
+        console.log('error: ', error);
+        setState({
+          ...state,
+          error: 'Ocurrió un error al leer el archivo. Tiene que ser de tipo .CSV o .XLSX', 
+          loading: false,
+          open: true,
+          severity: 'error'
+        });
+        return;
       });
-      return;
+      
+
+      
     } else {
 
       setState({
         ...state,
         fileName: file.name,
-        error: "File uploaded",
+        error: "Archivo cargado correctamente",
         loading: true,
         open: true,
         severity: "success",
@@ -191,7 +233,6 @@ const Home: NextPage = () => {
             if(num === results.data.length) {
               clearInterval(intervalID);
             } else {
-              //console.log('numParticipants: ', num);
               num = num + 1;
               setNumber(num);
             }
@@ -201,6 +242,27 @@ const Home: NextPage = () => {
         setIntervalID(interval);
       },
     });
+  }
+
+  /* Set participants without file */
+  const setParticipantsWithoutFile = (participants: any) => {
+    console.log('participants: ', participants);
+
+    dispatch(setReduxParticipants(participants));
+
+    let num = 0;
+
+    const interval: any = setInterval(() => {
+        if(num === participants.length) {
+          clearInterval(intervalID);
+        } else {
+          num = num + 1;
+          setNumber(num);
+        }
+
+    }, 10)
+
+    setIntervalID(interval);
   }
 
 
@@ -239,13 +301,13 @@ const Home: NextPage = () => {
                 >
 
                   {/* title */}
-                  <div style={{marginBottom: '50px'}}>
+                  <div className={styles.margin__div}>
                     <h1 className={styles.title}>ARRASTRA Y SUELTA</h1>
-                    <p className={styles.text}>(.XLSX)</p>
+                    <p className={styles.text}>(.XLSX o .CSV)</p>
                   </div>
 
                   {/* icon */}
-                  <div style={{marginBottom: '50px'}}>
+                  <div className={styles.margin__div}>
                     <FileUploadRoundedIcon className={styles.icon} />
                   </div>
 
@@ -260,7 +322,7 @@ const Home: NextPage = () => {
               <div className={styles.upload__drop}>
 
                 {/* title */}
-                <div>
+                <div className={styles.margin__div}>
                   <h1 className={styles.title}>COMENZAR RIFA</h1>
                 </div>
 
