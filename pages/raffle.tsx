@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react'
 
 /* Components */
 import Head from 'next/head'
+import Link from 'next/link'
 import styles from '../styles/Raffle.module.css'
 import Image from 'next/image'
 import Logo from '../public/img/mobil_logo.png'
@@ -13,18 +14,13 @@ import Image2 from '../public/img/mobil2.png'
 
 
 /* Redux */
-import { 
-  setReduxParticipants,
-} from "../redux/actions"
 import { selectParticipants } from "../redux/states/participants/reducer"
-import { useAppSelector, useAppDispatch } from '../redux/hooks'
+import { useAppSelector } from '../redux/hooks'
 import { Participant } from '../redux/states/participants/interfaces'
 
 /* Material UI */
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import ReplayCircleFilledRoundedIcon from '@mui/icons-material/ReplayCircleFilledRounded';
 
 
 /* Motion */
@@ -41,7 +37,6 @@ const Raffle: NextPage = () => {
         numParticipants: 0,
     });
 
-    const [deletedFolios, setDeletedFolios] = useState<Array<string>>([]);
     const [name, setName] = useState<string>("--");
     const [folio, setFolio] = useState<string>("--");
 
@@ -49,7 +44,6 @@ const Raffle: NextPage = () => {
     const [slow, setSlow] = useState<boolean>(false);
 
     /* Redux */
-    const dispatch = useAppDispatch(); //function that allows to trigger actions that update the redux state
     const participants = useAppSelector(selectParticipants) //function that allows to get the Participants from the redux state
 
 
@@ -94,8 +88,9 @@ const Raffle: NextPage = () => {
                 console.log('numm: ', num, " index: ", index);
                 num = num + 1;
                 if(num === final) {
-                    console.log("stop");
-                    console.log("winners: ", state.winners);
+                    index = index + 1;
+                    setName(temp[index].nombre);
+                    setFolio(temp[index].folio);
                     setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFolio: temp[index].folio});
                     stop = true;
                     clearInterval(intervalID);
@@ -129,8 +124,6 @@ const Raffle: NextPage = () => {
             clearInterval(interval)
             interval = null
         }
-        console.log("final: " + final);
-
         let temp: Participant[] = participants;
 
         if(localStorage.getItem("deletedFolios") !== null) {
@@ -139,24 +132,13 @@ const Raffle: NextPage = () => {
             console.log(temp);
         }  
         
-        
-
         //@ts-ignore
         temp = shuffle(temp);
-        //let temp: Participant[] = participants;
-        console.log("time: ", time);
-       
 
         interval = setInterval(() => {
             if(!stop){
-                console.log('num: ', num, " index: ", index);
                 num = num + 1;
                 if(num === (final - 5))  {
-                    console.log("slow");
-                    /* 
-                    index = index + 1;
-                    setName(temp[index].nombre);
-                    setFolio(temp[index].folio); */
                     setSlow(true);
                     stop = true;
 
@@ -192,7 +174,7 @@ const Raffle: NextPage = () => {
         if (participants.length > 0) {
             localStorage.setItem("deletedFolios", JSON.stringify([]));
             setState({...state, numParticipants: participants.length});
-            runInterval(100);
+            runInterval(50);
         }
 
     } ,[]);
@@ -201,7 +183,6 @@ const Raffle: NextPage = () => {
     const handleReplayClick = async () => {
         //delete winner from participants
 
-        //let temp = participants.filter((participant: Participant) => participant.folio !== state.winnerFolio);
         if(localStorage.getItem("deletedFolios") !== null) {
             let temp = JSON.parse(localStorage.getItem("deletedFolios")!);
             temp.push(state.winnerFolio);
@@ -212,7 +193,15 @@ const Raffle: NextPage = () => {
         
         setState({...state, winnerStatus: 0, winnerFolio: "", numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 3});
         setSlow(false);
-        runInterval(100);
+        runInterval(50);
+    }
+
+    /* Handle replay raffle with all participans */
+    const handleReplayAllClick = () => {
+        localStorage.setItem("deletedNames", JSON.stringify([]));
+        setState({...state, winnerStatus: 0, winnerFolio: "", numParticipants: participants.length, animationIteration: state.animationIteration + 3});
+        setSlow(false);
+        runInterval(50);
     }
 
 
@@ -292,18 +281,21 @@ const Raffle: NextPage = () => {
                 {state.winnerStatus === 1 && (
                     <div className={styles.buttons}>
 
-                        {/* Replay deleting winner */}
+                        {/* <Image className={styles.icon__image} src={Redo} width={35} height={35}/> */}
                         <Tooltip title="Replay without winner" placement="top">
-                            <IconButton onClick={handleReplayClick}>
-                                <ReplayCircleFilledRoundedIcon className={styles.icon} />
-                            </IconButton>
+                            <img onClick={handleReplayClick} className={styles.icon__image} style={{marginRight: '10px'}} src="/img/redo_w.svg" alt="Redo without winner"/>
                         </Tooltip>
 
-                        {/* Do anothe raffle */}
-                        <Tooltip title="Do another" placement="top">
-                            <IconButton>
-                                <ReplayCircleFilledRoundedIcon className={styles.icon} />
-                            </IconButton>
+                        {/* Replay with all participants */}
+                        <Tooltip title="Replay with all" placement="top">
+                            <img onClick={handleReplayAllClick} className={styles.icon__image} style={{marginRight: '10px'}} src="/img/redo.svg" alt='Redo all'/>
+                        </Tooltip>
+
+                        {/* Do another raffle */}
+                        <Tooltip title="Do another raffle" placement="top">
+                            <Link href="/">
+                                <img className={styles.icon__image} src="/img/another.svg" alt='Another'/>
+                            </Link>
                         </Tooltip>
                     </div>    
                 )}

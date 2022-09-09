@@ -105,15 +105,49 @@ const Home: NextPage = () => {
 
       //validate file
       if(file.type !== 'text/csv') {
+        const schema = {
+        'nombre': {
+          prop: 'nombre',
+          type: String,
+          required: true
+        },
+        'folio': {
+          prop: 'folio',
+          type: String,
+          required: true
+        }
+      }
+
+
+      readXlsxFile(file, {schema}).then((rows) => {
+        console.log('rows: ', rows);
+
         setState({
           ...state,
-          error: 'Only CSV files are allowed',
+          fileName: file.name,
+          error: "Archivo cargado correctamente",
+          loading: true,
+          open: true,
+          severity: "success",
+          step: 1
+        });
+
+        if(rows.rows.length > 0) {
+          //@ts-ignore
+          setParticipantsWithoutFile(rows.rows);
+        }
+        //return rows;
+      }).catch((error) => {
+        console.log('error: ', error);
+        setState({
+          ...state,
+          error: 'Ocurrió un error al leer el archivo. Tiene que ser de tipo .CSV o .XLSX', 
           loading: false,
           open: true,
           severity: 'error'
         });
-        console.log('error: ', 'Only CSV files are allowed');
         return;
+      });
       } else if(files.length > 1) {
         setState({
           ...state,

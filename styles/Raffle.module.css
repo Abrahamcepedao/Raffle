@@ -183,6 +183,15 @@
 .buttons {
   margin-left: 100px;
 }
+.icon__image {
+  cursor: pointer;
+  width: 35px;
+  opacity: 0.85;
+  transition: transform 450ms;
+}
+.icon__image:hover { 
+  transform: scale(1.08);
+}
 
 /* <-------images-------> */
 /* logo */
