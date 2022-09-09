@@ -154,7 +154,7 @@
     align-items: center;
 }
 .person__icon {
-  font-size: 50px;
+  font-size: 50px !important;
 }
 .person__icon, .icon__container p, .icon {
   color: rgba(245, 245, 245, 0.85);
