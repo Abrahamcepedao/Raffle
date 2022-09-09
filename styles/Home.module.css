@@ -47,7 +47,7 @@
   opacity: 0.9;
 }
 .icon {
-  font-size: 100px;
+  font-size: 100px !important;
 }
 
 
