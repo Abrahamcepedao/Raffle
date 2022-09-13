@@ -10,7 +10,6 @@ import styles from '../styles/Raffle.module.css'
 import Image from 'next/image'
 import Logo from '../public/img/mobil_logo.png'
 import Image1 from '../public/img/mobil1.png'
-import Image2 from '../public/img/mobil2.png'
 
 /* Redux */
 import { selectParticipants } from "../redux/states/participants/reducer"
@@ -236,16 +235,8 @@ const Raffle: NextPage = () => {
         <div className={styles.overlay}>
             {/* outer circle */}
             <motion.div className={slow ? styles.outer__circle2 : styles.outer__circle} style={{animationIterationCount: !slow ? 'infinite': state.animationIteration}}
-                /* animate={{
-                    //scale: [1, 2, 2, 1, 1],
-                    rotate: [0, 360],
-                    //borderRadius: ["20%", "20%", "50%", "50%", "20%"],
-                }} */
                 animate={slow ? "slow" : "fast"}
                 variants={variants}
-                //infinite durationn
-
-
             >
                 <div className={styles.ball}></div>
             </motion.div>
@@ -283,17 +274,17 @@ const Raffle: NextPage = () => {
                     <div className={styles.buttons}>
 
                         {/* <Image className={styles.icon__image} src={Redo} width={35} height={35}/> */}
-                        <Tooltip title="Replay without winner" placement="top">
+                        <Tooltip title="Repetir sin ganador" placement="top">
                             <img onClick={handleReplayClick} className={styles.icon__image} style={{marginRight: '10px'}} src="/img/redo_w.svg" alt="Redo without winner"/>
                         </Tooltip>
 
                         {/* Replay with all participants */}
-                        <Tooltip title="Replay with all" placement="top">
+                        <Tooltip title="Repetir con todos" placement="top">
                             <img onClick={handleReplayAllClick} className={styles.icon__image} style={{marginRight: '10px'}} src="/img/redo.svg" alt='Redo all'/>
                         </Tooltip>
 
                         {/* Do another raffle */}
-                        <Tooltip title="Do another raffle" placement="top">
+                        <Tooltip title="Otra rifa" placement="top">
                             <Link href="/">
                                 <img className={styles.icon__image} src="/img/another.svg" alt='Another'/>
                             </Link>
@@ -315,7 +306,7 @@ const Raffle: NextPage = () => {
 
             {/* Image 2 */}
             <div className={styles.image__container2}>
-                <Image src={Image2} width={350} height={300}/>
+                <Image src={Image1} width={500} height={160}/>
             </div>
             
         </div>
