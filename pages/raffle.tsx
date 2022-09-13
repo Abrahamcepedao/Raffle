@@ -35,8 +35,8 @@ const Raffle: NextPage = () => {
         numParticipants: 0,
     });
 
-    const [name, setName] = useState<string>("CESAR PINELO");
-    const [folio, setFolio] = useState<string>("#98378");
+    const [name, setName] = useState<string>("--");
+    const [folio, setFolio] = useState<string>("--");
 
     const [intervalID, setIntervalID] = useState<number>(0);
     const [slow, setSlow] = useState<boolean>(false);
