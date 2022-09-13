@@ -10,7 +10,6 @@ import FileButton from '../components/FileButton'
 import Image from 'next/image'
 import Logo from '../public/img/mobil_logo.png'
 import Image1 from '../public/img/mobil1.png'
-import Image2 from '../public/img/mobil2.png'
 
 /* Redux */
 import { 
@@ -125,10 +124,7 @@ const Home: NextPage = () => {
         setState({
           ...state,
           fileName: file.name,
-          error: "Archivo cargado correctamente",
           loading: true,
-          open: true,
-          severity: "success",
           step: 1
         });
 
@@ -207,10 +203,7 @@ const Home: NextPage = () => {
         setState({
           ...state,
           fileName: file.name,
-          error: "Archivo cargado correctamente",
           loading: true,
-          open: true,
-          severity: "success",
           step: 1
         });
 
@@ -337,7 +330,7 @@ const Home: NextPage = () => {
                   {/* title */}
                   <div className={styles.margin__div}>
                     <h1 className={styles.title}>ARRASTRA Y SUELTA</h1>
-                    <p className={styles.text}>(.XLSX o .CSV)</p>
+                    <p className={styles.text}>(.XLSX)</p>
                   </div>
 
                   {/* icon */}
@@ -388,7 +381,7 @@ const Home: NextPage = () => {
 
           {/* Image 2 */}
           <div className={styles.image__container2}>
-              <Image src={Image2} width={350} height={300}/>
+              <Image src={Image1} width={500} height={160}/>
           </div>
 
         </div>
