@@ -342,7 +342,8 @@ const Home: NextPage = () => {
 
                   {/* icon */}
                   <div className={styles.margin__div}>
-                    <FileUploadRoundedIcon className={styles.icon} />
+                    <img className={styles.icon__image} src="/img/upload.png" alt='Another'/>
+                    {/* <FileUploadRoundedIcon className={styles.icon} /> */}
                   </div>
 
                   {/* button */}
@@ -372,11 +373,8 @@ const Home: NextPage = () => {
                     <button className={styles.start__button}><p>COMENZAR</p></button>
                   </Link>
                 </div>
-
-                {/*  */}
               </div>
           )}
-
 
           {/* Logo image */}
           <div className={styles.logo__container}>
@@ -385,12 +383,12 @@ const Home: NextPage = () => {
 
           {/* Image 1 */}
           <div className={styles.image__container1}>
-              <Image src={Image1} width={400} height={200}/>
+              <Image src={Image1} width={500} height={160}/>
           </div>
 
           {/* Image 2 */}
           <div className={styles.image__container2}>
-              <Image src={Image2} width={300} height={200}/>
+              <Image src={Image2} width={350} height={300}/>
           </div>
 
         </div>

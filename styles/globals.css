@@ -28,3 +28,36 @@ a {
 *::-webkit-scrollbar {
   display: none;
 }
+
+/* Fonts */
+/* regular italic */
+@font-face {
+  font-family: "EMprint";
+  src: url('../fonts/EMprint/EMprint-RegularItalic.ttf');
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* bold */
+@font-face {
+  font-family: "EMprint";
+  src: url('../fonts/EMprint/EMprint-Bold.ttf');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* bold italic */
+@font-face {
+  font-family: "EMprint";
+  src: url('../fonts/EMprint/EMprint-BoldItalic.ttf');
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* semibold italic */
+@font-face {
+  font-family: "EMprint";
+  src: url('../fonts/EMprint/EMprint-SemiboldItalic.ttf');
+  font-weight: 600;
+  font-style: italic;
+}

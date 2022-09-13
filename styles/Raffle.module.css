@@ -6,7 +6,7 @@
 .main {
   min-height: 100vh;
   overflow: hidden;
-  background-image: url('../public/img/background.png');
+  background-image: url('../public/img/background2.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -22,13 +22,13 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75));
+  //background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75));
 }
 
 /* outer circle */
 .outer__circle, .outer__circle2 {
-    width: 650px;
-    height: 650px;
+    width: 700px;
+    height: 700px;
     border-radius: 50%;
     background: none;
     position: absolute;
@@ -36,7 +36,7 @@
     //left: 50%;
     //transform: translate(-50%, -50%);
     z-index: 0;
-    border: 0.2rem solid #fff;
+    border: 0.1rem solid #fff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,16 +49,6 @@
             0 0 1rem #08f,
             inset 0 0 1rem #08f
 }
-.outer__circle {
-  //-webkit-animation: spin 500ms linear 0s infinite;
-}
-.outer__circle2 {
-  //top: 50%;
-  //left: 50%;
-  //-webkit-animation: spin 10s linear 0s;
-  //animation-iteration-count: 3;
-}
-
 .ball {
     position: absolute;
     top: -25px;
@@ -82,11 +72,12 @@
 
 /* inner circle */
 .circle {
-  width: 425px;
-  height: 425px;
+  width: 450px;
+  height: 450px;
   border-radius: 50%;
   //background: linear-gradient(90deg, #EB2D5F 0%, #0E33DC 100%);
-  background: linear-gradient(242.6deg, rgba(27, 93, 193, 0.6) 14.66%, rgba(76, 139, 214, 0.6) 49.26%, rgba(36, 107, 214, 0.6) 82.48%);
+  //background: linear-gradient(242.6deg, rgba(27, 93, 193, 0.6) 14.66%, rgba(76, 139, 214, 0.6) 49.26%, rgba(36, 107, 214, 0.6) 82.48%);
+  background: linear-gradient(160.9deg, rgb(52 205 240 / 50%) 5%, rgba(14, 51, 220, 0.02) 40.09%, rgba(20, 62, 220, 0.02) 70%, rgb(62 204 222 / 50%) 90.02%);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -98,14 +89,13 @@
 /* card */
 .card__container {
     z-index: 10;
-    width: 300px;
-    height: 450px;
+    width: 350px;
+    height: 500px;
     padding: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    //background: rgba(255, 255, 255, 0.01);
     box-shadow:
             0 0 .5rem #fff,
             inset 0 0 .5rem #fff,
@@ -113,34 +103,37 @@
             inset 0 0 2rem #08f,
             0 0 1rem #08f,
             inset 0 0 2rem #08f;
-    //box-shadow: -10px 10px 50px 10px rgba(63, 59, 234, 0.25), 10px -10px 50px 10px rgba(241, 44, 115, 0.5), inset 0px 39px 55px -36px rgba(255, 255, 255, 0.5), inset 0px 7px 11px -4px #FFFFFF, inset 0px -82px 68px -64px rgba(96, 68, 144, 0.3), inset 0px 95px 100px -48px rgba(202, 204, 255, 0.3), inset 0px 4px 16px rgba(154, 146, 210, 0.3), inset 0px 1px 0px rgba(227, 222, 255, 0.2);
-    //backdrop-filter: blur(100px);
-    /* Note: backdrop-filter has minimal browser support */
-    background: linear-gradient(180deg, rgba(42, 69, 213, 0.2) 0%, rgba(42, 69, 213, 0.9) 30.54%, #0C2296 67.59%, rgba(42, 69, 213, 0.2) 100%);
     border-radius: 10px;
     text-align: center;
 }
-.winner__title {
+.winner__title, .name {
+    font-family: "EMprint";
     font-size: 50px;
+    font-weight: bold;
     font-style: italic;
     text-shadow: 0 0 1rem #000;
 }
 
 .name, .folio, .folio2 {
     //mix-blend-mode: overlay;
-    opacity: 0.7;
-    font-style: italic;
+    opacity: 0.4;
     text-shadow: -2px 2px 0.2rem #000;
 }
 .name {
-    font-size: 35px;
+   
 }
 .folio {
-    font-size: 35px;
-    margin-bottom: -10px;
+  font-family: "EMprint";
+  font-size: 50px;
+  font-weight: 600;
+  font-style: italic;
+  margin-bottom: -10px;
 }
 .folio2 {
-    font-size: 15px;
+  font-family: "EMprint";
+  font-size: 20px;
+  font-weight: normal;
+  font-style: italic;
 }
 
 
@@ -154,7 +147,7 @@
     align-items: center;
 }
 .person__icon {
-  font-size: 50px !important;
+  font-size: 60px !important;
 }
 .person__icon, .icon__container p, .icon {
   color: rgba(245, 245, 245, 0.85);
@@ -173,7 +166,9 @@
 .icon__container p {
   margin: auto;
   margin-left: 5px;
-  font-size: 40px;
+  font-size: 50px;
+  font-family: 'EMprint';
+  font-weight: bold;
 }
 
 .icon {

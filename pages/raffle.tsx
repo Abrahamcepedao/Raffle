@@ -12,7 +12,6 @@ import Logo from '../public/img/mobil_logo.png'
 import Image1 from '../public/img/mobil1.png'
 import Image2 from '../public/img/mobil2.png'
 
-
 /* Redux */
 import { selectParticipants } from "../redux/states/participants/reducer"
 import { useAppSelector } from '../redux/hooks'
@@ -37,8 +36,8 @@ const Raffle: NextPage = () => {
         numParticipants: 0,
     });
 
-    const [name, setName] = useState<string>("--");
-    const [folio, setFolio] = useState<string>("--");
+    const [name, setName] = useState<string>("CESAR PINELO");
+    const [folio, setFolio] = useState<string>("#98378");
 
     const [intervalID, setIntervalID] = useState<number>(0);
     const [slow, setSlow] = useState<boolean>(false);
@@ -259,7 +258,7 @@ const Raffle: NextPage = () => {
                 <div>
                     {/* Winner title */}
                     {state.winnerStatus === 1 && (
-                        <h2 className={styles.winner__title}>¡Ganador!</h2>
+                        <h2 className={styles.winner__title}>¡GANADOR!</h2>
                     )}
 
                     {/* name */}
@@ -311,13 +310,14 @@ const Raffle: NextPage = () => {
 
             {/* Image 1 */}
             <div className={styles.image__container1}>
-                <Image src={Image1} width={400} height={200}/>
+                <Image src={Image1} width={500} height={160}/>
             </div>
 
             {/* Image 2 */}
             <div className={styles.image__container2}>
-                <Image src={Image2} width={300} height={200}/>
+                <Image src={Image2} width={350} height={300}/>
             </div>
+            
         </div>
 
       </main>
