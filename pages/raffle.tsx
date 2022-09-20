@@ -30,9 +30,11 @@ const Raffle: NextPage = () => {
     const [state, setState] = useState({
         winnerStatus: 0,
         winnerFolio: "",
+        winnerFinal: 0,
         winners: 0,
         animationIteration: 2,
         numParticipants: 0,
+        times: 0,
     });
 
     const [name, setName] = useState<string>("--");
@@ -69,7 +71,7 @@ const Raffle: NextPage = () => {
     let stop = false;
     //@ts-ignore
     let interval;
-    let final = Math.floor(Math.random() * participants.length) + (participants.length * 3);
+    let final = Math.floor(Math.random() * participants.length) + (participants.length);
 
 
     const slowInterval = (temp:Participant[]) => {
@@ -84,13 +86,18 @@ const Raffle: NextPage = () => {
         
         interval = setInterval(() => {
             if(!stop){
-                console.log('numm: ', num, " index: ", index);
+                
                 num = num + 1;
                 if(num === final) {
                     index = index + 1;
                     setName(temp[index].nombre);
                     setFolio(temp[index].folio);
-                    setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFolio: temp[index].folio});
+                    if(state.times < 4){
+                        setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 0, winnerFolio: temp[index].folio, times: state.times + 1});    
+                    } else {
+                        setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerFolio: temp[index].folio, times: 0});
+                    }
+                    
                     stop = true;
                     clearInterval(intervalID);
                     //@ts-ignore
@@ -129,7 +136,6 @@ const Raffle: NextPage = () => {
         if(localStorage.getItem("deletedFolios") !== null) {
             let deletedFolios = JSON.parse(localStorage.getItem("deletedFolios")!);
             temp = temp.filter((item:Participant) => !deletedFolios.includes(item.folio));
-            console.log(temp);
         }  
         
         //@ts-ignore
@@ -174,7 +180,7 @@ const Raffle: NextPage = () => {
         if (participants.length > 0) {
             localStorage.setItem("deletedFolios", JSON.stringify([]));
             setState({...state, numParticipants: participants.length});
-            runInterval(50);
+            runInterval(20);
         }
 
     } ,[]);
@@ -190,18 +196,21 @@ const Raffle: NextPage = () => {
         } else {
             localStorage.setItem("deletedFolios", JSON.stringify([state.winnerFolio]));
         }
-        
-        setState({...state, winnerStatus: 0, winnerFolio: "", numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 3});
+        if(state.winnerFinal === 1) {
+            setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 3});
+        } else {
+            setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 1});
+        }
         setSlow(false);
-        runInterval(50);
+        runInterval(20);
     }
 
     /* Handle replay raffle with all participans */
     const handleReplayAllClick = () => {
-        localStorage.setItem("deletedNames", JSON.stringify([]));
-        setState({...state, winnerStatus: 0, winnerFolio: "", numParticipants: participants.length, animationIteration: state.animationIteration + 3});
+        localStorage.setItem("deletedFolios", JSON.stringify([]));
+        setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 0, numParticipants: participants.length, animationIteration: state.animationIteration + 3});
         setSlow(false);
-        runInterval(50);
+        runInterval(20);
     }
 
 
@@ -248,7 +257,7 @@ const Raffle: NextPage = () => {
             <div className={styles.card__container}>
                 <div>
                     {/* Winner title */}
-                    {state.winnerStatus === 1 && (
+                    {state.winnerFinal === 1 && (
                         <h2 className={styles.winner__title}>¡GANADOR!</h2>
                     )}
 
