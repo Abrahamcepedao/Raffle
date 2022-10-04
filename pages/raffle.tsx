@@ -12,7 +12,7 @@ import Logo from '../public/img/mobil_logo.png'
 import Image1 from '../public/img/mobil1.png'
 
 /* Redux */
-import { selectParticipants } from "../redux/states/participants/reducer"
+import { selectParticipants, selectIsFinal } from "../redux/states/participants/reducer"
 import { useAppSelector } from '../redux/hooks'
 import { Participant } from '../redux/states/participants/interfaces'
 
@@ -45,7 +45,7 @@ const Raffle: NextPage = () => {
 
     /* Redux */
     const participants = useAppSelector(selectParticipants) //function that allows to get the Participants from the redux state
-
+    const isFinal = useAppSelector(selectIsFinal) //function that allows to get the isFinal from the redux state
 
     /* Shuffle array */
     function shuffle(array: []) {
@@ -118,7 +118,7 @@ const Raffle: NextPage = () => {
                 clearInterval(interval);
             }
 
-        }, 2000)
+        }, 1000)
 
         //@ts-ignore
         setIntervalID(interval);
@@ -177,11 +177,13 @@ const Raffle: NextPage = () => {
 
     useEffect(() => {
 
-        if (participants.length > 0) {
+        console.log("isFinal: ", isFinal);
+
+       /*  if (participants.length > 0) {
             localStorage.setItem("deletedFolios", JSON.stringify([]));
             setState({...state, numParticipants: participants.length});
             runInterval(20);
-        }
+        } */
 
     } ,[]);
 
@@ -226,7 +228,7 @@ const Raffle: NextPage = () => {
         slow: {
             rotate: [0, 360], 
             transition: {
-                duration: 10,
+                duration: 5,
                 repeat: 0,
                 ease: "linear",
             }},
@@ -310,12 +312,12 @@ const Raffle: NextPage = () => {
 
             {/* Image 1 */}
             <div className={styles.image__container1}>
-                <Image src={Image1} width={500} height={160}/>
+                <Image src={Image1} width={300} height={100}/>
             </div>
 
             {/* Image 2 */}
             <div className={styles.image__container2}>
-                <Image src={Image1} width={500} height={160}/>
+                <Image src={Image1} width={300} height={100}/>
             </div>
             
         </div>

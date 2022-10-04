@@ -13,3 +13,11 @@ export const setReduxParticipants = (participants: Array<Participant>) => {
     payload: participants
   };
 }
+
+//Function that sets the isFinal
+export const setReduxIsFinal = (isFinal: boolean) => {
+  return { 
+    type: t.SET_IS_FINAL, 
+    payload: isFinal
+  };
+}

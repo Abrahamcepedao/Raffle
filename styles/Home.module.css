@@ -20,8 +20,8 @@
 
 .upload__drop {
   z-index: 10;
-  width: 600px;
-  height: 600px;
+  width: 500px;
+  height: 500px;
   padding: 80px;
   display: flex;
   justify-content: space-between;
@@ -33,12 +33,12 @@
   font-style: italic;
 }
 
-.margin__div, .icon__container {
-  margin-bottom: 50px;
+.margin__div, .icon__container, .switch {
+  margin-bottom: 20px;
 }
 
 .title {
-  font-size: 50px;
+  font-size: 30px;
   margin-top: 0px;
   margin-bottom: -5px;
   width: 300px;
@@ -46,6 +46,7 @@
   font-weight: bold;
 }
 .title, .text, .icon, .icon__container p {
+  color: white;
   opacity: 0.9;
   text-shadow: -4px 4px 6px rgba(0, 0, 0, 0.7);
 }
@@ -71,6 +72,9 @@
   font-weight: bold;
 }
 
+
+/* switch */
+/* Start button */
 .start__button {
   padding: 10px 10px;
   background: #d5171f;

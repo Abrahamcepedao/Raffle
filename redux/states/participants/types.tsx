@@ -3,3 +3,4 @@
 */
 
 export const SET_PARTICIPANTS = 'SET_PARTICIPANTS'
+export const SET_IS_FINAL = 'SET_IS_FINAL'
