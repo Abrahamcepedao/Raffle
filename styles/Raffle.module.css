@@ -21,8 +21,8 @@
 
 /* outer circle */
 .outer__circle, .outer__circle2 {
-    width: 700px;
-    height: 700px;
+    width: 500px;
+    height: 500px;
     border-radius: 50%;
     background: none;
     position: absolute;
@@ -62,8 +62,8 @@
 
 /* inner circle */
 .circle {
-  width: 450px;
-  height: 450px;
+  width: 350px;
+  height: 350px;
   border-radius: 50%;
   background: linear-gradient(160.9deg, rgb(52 205 240 / 50%) 5%, rgb(9 34 149 / 37%) 30.09%, rgb(15 42 142 / 50%) 70%, rgb(62 204 222 / 50%) 94.02%);
   position: absolute;
@@ -77,8 +77,8 @@
 /* card */
 .card__container {
     z-index: 10;
-    width: 350px;
-    height: 500px;
+    width: 250px;
+    height: 380px;
     padding: 30px;
     display: flex;
     justify-content: center;
@@ -96,22 +96,22 @@
 }
 .winner__title, .name {
     font-family: "EMprint";
-    font-size: 50px;
+    font-size: 35px;
     font-weight: bold;
     font-style: italic;
     text-shadow: 0 0 1rem #000;
+    color: white;
 }
 
 .name, .folio, .folio2 {
+    color: white;
     opacity: 0.4;
     text-shadow: -2px 2px 0.2rem #000;
 }
-.name {
-   
-}
+
 .folio {
   font-family: "EMprint";
-  font-size: 50px;
+  font-size: 35px;
   font-weight: 600;
   font-style: italic;
   margin-bottom: -10px;
@@ -145,8 +145,6 @@
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  margin-top: 30px;
-  margin-bottom: 30px;
   max-width: 130px;
 }
 
@@ -187,7 +185,7 @@
 /* image 1 */
 .image__container1 {
     position: absolute;
-    bottom: 40px;
+    bottom: 10px;
     left: 0px;
     //width: 100px;
 }
@@ -195,7 +193,7 @@
 /* image 2 */
 .image__container2 {
     position: absolute;
-    bottom: 40px;
+    bottom: 10px;
     right: 0px;
     //width: 100px;
 }

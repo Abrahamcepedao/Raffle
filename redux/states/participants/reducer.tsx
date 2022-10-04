@@ -8,7 +8,8 @@ import type { AppState } from '../../../redux/store';
 
 const initialState = {
     participants: 0,
-    inDropZone: false
+    inDropZone: false,
+    isFinal: false,
 }
 
 const reducer = (state = initialState, action:any) => {
@@ -19,7 +20,11 @@ const reducer = (state = initialState, action:any) => {
         ...state,
         participants: action.payload
       };
-    
+    case t.SET_IS_FINAL:
+      return {
+        ...state,
+        isFinal: action.payload
+      };
       
     default:
       return {...state};
@@ -27,5 +32,6 @@ const reducer = (state = initialState, action:any) => {
 }
 
 export const selectParticipants = (state: AppState) => state.participantsState.participants
+export const selectIsFinal = (state: AppState) => state.participantsState.isFinal
 
 export default reducer;

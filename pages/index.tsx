@@ -1,7 +1,7 @@
 import type { NextPage } from 'next'
 
 /* React */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 /* Components */
 import Head from 'next/head'
@@ -16,12 +16,15 @@ import {
   setDropDepth, 
   setInDropZone, 
   setReduxParticipants,
+  setReduxIsFinal,
 } from "../redux/actions"
 import { selectDropDepth } from "../redux/states/file/reducer"
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 
 /* Material UI */
-import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
+import Switch from '@mui/material/Switch';
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
@@ -54,6 +57,7 @@ const Home: NextPage = () => {
     severity: "error",
     step: 0,
     open: false,
+    isFinal: false
   });
 
   const [number, setNumber] = useState<number>(0);
@@ -63,6 +67,11 @@ const Home: NextPage = () => {
   const dispatch = useAppDispatch(); //function that allows to trigger actions that update the redux state
   /* redux - file */
   const dropDepth = useAppSelector(selectDropDepth) //function that allows to get the dropDepth from the redux state
+
+  /* UseEffect */
+  useEffect(() => {
+    dispatch(setReduxIsFinal(false));
+  },[])
 
   /* Functions - handle drag and drop */
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
@@ -176,7 +185,6 @@ const Home: NextPage = () => {
 
   /* Functions - handle file upload */
   const uploadFile = async(e:any) => {
-    console.log(e.target.files[0]);
 
     let files = e.target.files; //get files
     var file = files[0];
@@ -198,7 +206,6 @@ const Home: NextPage = () => {
 
 
       readXlsxFile(file, {schema}).then((rows) => {
-        console.log('rows: ', rows);
 
         setState({
           ...state,
@@ -249,7 +256,6 @@ const Home: NextPage = () => {
       skipEmptyLines: true,
       //@ts-ignore
       complete: function (results) {
-        console.log(results.data)
 
         //@ts-ignore
         dispatch(setReduxParticipants(results.data));
@@ -273,7 +279,6 @@ const Home: NextPage = () => {
 
   /* Set participants without file */
   const setParticipantsWithoutFile = (participants: any) => {
-    console.log('participants: ', participants);
 
     dispatch(setReduxParticipants(participants));
 
@@ -307,6 +312,13 @@ const Home: NextPage = () => {
     })
   };
 
+
+  /* Handle switch change */
+  const handleSwitchChange = () => {
+    dispatch(setReduxIsFinal(!state.isFinal));
+    setState({ ...state, isFinal: !state.isFinal });
+  };
+
   return (
     <div>
       <Head>
@@ -329,7 +341,7 @@ const Home: NextPage = () => {
 
                   {/* title */}
                   <div className={styles.margin__div}>
-                    <h1 className={styles.title}>ARRASTRA Y SUELTA</h1>
+                    <h1 className={styles.title}>Lubricantes Mobil® y tú, un dúo ganador</h1>
                     <p className={styles.text}>(.XLSX)</p>
                   </div>
 
@@ -351,7 +363,7 @@ const Home: NextPage = () => {
 
                 {/* title */}
                 <div className={styles.margin__div}>
-                  <h1 className={styles.title}>COMENZAR RIFA</h1>
+                  <h1 className={styles.title}>Lubricantes Mobil® y tú, un dúo ganador</h1>
                 </div>
 
                 {/* icon */}
@@ -360,6 +372,17 @@ const Home: NextPage = () => {
                   <p>{number}</p>
                 </div>
 
+                {/* Switch (Final) */}
+                <div className={styles.switch}>
+                  <FormGroup aria-label="position" row>
+                    <FormControlLabel
+                      value="top"
+                      control={<Switch color="primary" value={state.isFinal} onChange={handleSwitchChange} />}
+                      label="Final"
+                      labelPlacement="top"
+                    />
+                  </FormGroup>
+                </div>
                 {/* button */}
                 <div>
                   <Link href="/raffle">
@@ -376,12 +399,12 @@ const Home: NextPage = () => {
 
           {/* Image 1 */}
           <div className={styles.image__container1}>
-              <Image src={Image1} width={500} height={160}/>
+              <Image src={Image1} width={400} height={120}/>
           </div>
 
           {/* Image 2 */}
           <div className={styles.image__container2}>
-              <Image src={Image1} width={500} height={160}/>
+              <Image src={Image1} width={400} height={120}/>
           </div>
 
         </div>
