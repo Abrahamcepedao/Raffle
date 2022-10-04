@@ -92,10 +92,21 @@ const Raffle: NextPage = () => {
                     index = index + 1;
                     setName(temp[index].nombre);
                     setFolio(temp[index].folio);
-                    if(state.times < 4){
-                        setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 0, winnerFolio: temp[index].folio, times: state.times + 1});    
+                    if(isFinal){
+                        console.log("final: ", state.times)
+                        if(state.times < 4){
+                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 0, winnerFolio: temp[index].folio, times: state.times + 1});    
+                        } else if(state.times === 4) {
+                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerFolio: temp[index].folio, times: state.times + 1});
+                        } else {
+                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerFolio: temp[index].folio, times: 0});
+                        }
                     } else {
-                        setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerFolio: temp[index].folio, times: 0});
+                        if(state.times < 4){
+                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 0, winnerFolio: temp[index].folio, times: state.times + 1});    
+                        } else {
+                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerFolio: temp[index].folio, times: 0});
+                        }
                     }
                     
                     stop = true;
@@ -179,11 +190,11 @@ const Raffle: NextPage = () => {
 
         console.log("isFinal: ", isFinal);
 
-       /*  if (participants.length > 0) {
+        if (participants.length > 0) {
             localStorage.setItem("deletedFolios", JSON.stringify([]));
             setState({...state, numParticipants: participants.length});
             runInterval(20);
-        } */
+        }
 
     } ,[]);
 
@@ -199,7 +210,17 @@ const Raffle: NextPage = () => {
             localStorage.setItem("deletedFolios", JSON.stringify([state.winnerFolio]));
         }
         if(state.winnerFinal === 1) {
-            setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 3});
+            console.log("final: ", isFinal)
+            if(isFinal){
+                if(state.times == 4){
+                    setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 5, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 3});
+                } else {
+                    console.log("reseting..");
+                    setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 1});
+                }
+            } else {
+                setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 3});
+            }
         } else {
             setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 1});
         }
