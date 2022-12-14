@@ -29,7 +29,7 @@ const Raffle: NextPage = () => {
     /* useState - upload */
     const [state, setState] = useState({
         winnerStatus: 0,
-        winnerFolio: "",
+        winnerName: "",
         winnerFinal: 0,
         winners: 0,
         animationIteration: 2,
@@ -38,14 +38,18 @@ const Raffle: NextPage = () => {
     });
 
     const [name, setName] = useState<string>("--");
-    const [folio, setFolio] = useState<string>("--");
+    //const [folio, setFolio] = useState<string>("--");
+    //const [place, setPlace] = useState<number>(0);
+    //const [points, setPoints] = useState<number>(0);
 
     const [intervalID, setIntervalID] = useState<number>(0);
     const [slow, setSlow] = useState<boolean>(false);
 
+    const places = ["5°", "4°", "3°", "2°", "1°"]
+    const points_lst = [215, 425, 765, 1150, 1700]
+
     /* Redux */
     const participants = useAppSelector(selectParticipants) //function that allows to get the Participants from the redux state
-    const isFinal = useAppSelector(selectIsFinal) //function that allows to get the isFinal from the redux state
 
     /* Shuffle array */
     function shuffle(array: []) {
@@ -74,7 +78,7 @@ const Raffle: NextPage = () => {
     let final = Math.floor(Math.random() * participants.length) + (participants.length);
 
 
-    const slowInterval = (temp:Participant[]) => {
+    const slowInterval = (temp:Participant[], times_temp:number) => {
 
         //@ts-ignore
         if (interval) {
@@ -91,23 +95,13 @@ const Raffle: NextPage = () => {
                 if(num === final) {
                     index = index + 1;
                     setName(temp[index].nombre);
-                    setFolio(temp[index].folio);
-                    if(isFinal){
-                        console.log("final: ", state.times)
-                        if(state.times < 4){
-                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 0, winnerFolio: temp[index].folio, times: state.times + 1});    
-                        } else if(state.times === 4) {
-                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerFolio: temp[index].folio, times: state.times + 1});
-                        } else {
-                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerFolio: temp[index].folio, times: 0});
-                        }
+                    console.log(times_temp)
+                    if(times_temp < 4){
+                        setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 0, winnerName: temp[index].nombre, times: times_temp + 1});
                     } else {
-                        if(state.times < 4){
-                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 0, winnerFolio: temp[index].folio, times: state.times + 1});    
-                        } else {
-                            setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerFolio: temp[index].folio, times: 0});
-                        }
+                        setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerName: temp[index].nombre, times: times_temp + 1});
                     }
+                    
                     
                     stop = true;
                     clearInterval(intervalID);
@@ -117,11 +111,9 @@ const Raffle: NextPage = () => {
                 } else if(index < (temp.length-2)) {
                     index = index + 1;
                     setName(temp[index].nombre);
-                    setFolio(temp[index].folio);
                 } else {
                     index = index + 1;
                     setName(temp[index].nombre);
-                    setFolio(temp[index].folio);
                     index = 0;
                 }
             } else {
@@ -135,7 +127,7 @@ const Raffle: NextPage = () => {
         setIntervalID(interval);
     }
     
-    const runInterval = (time:number) => {
+    const runInterval = (time:number, times_temp:number) => {
         //@ts-ignore
         if (interval) {
             //@ts-ignore
@@ -144,10 +136,11 @@ const Raffle: NextPage = () => {
         }
         let temp: Participant[] = participants;
 
-        if(localStorage.getItem("deletedFolios") !== null) {
-            let deletedFolios = JSON.parse(localStorage.getItem("deletedFolios")!);
-            temp = temp.filter((item:Participant) => !deletedFolios.includes(item.folio));
+        if(localStorage.getItem("deletedNames") !== null) {
+            let deletedNames = JSON.parse(localStorage.getItem("deletedNames")!);
+            temp = temp.filter((item:Participant) => !deletedNames.includes(item.nombre));
         }  
+
         
         //@ts-ignore
         temp = shuffle(temp);
@@ -163,16 +156,14 @@ const Raffle: NextPage = () => {
                     //@ts-ignore
                     clearInterval(interval);
                     interval = null;
-                    slowInterval(temp);
+                    slowInterval(temp, times_temp);
                 }
                 else if(index < (temp.length-2)) {
                     index = index + 1;
                     setName(temp[index].nombre);
-                    setFolio(temp[index].folio);
                 } else {
                     index = index + 1;
                     setName(temp[index].nombre);
-                    setFolio(temp[index].folio);
                     index = 0;
                 }
             } else {
@@ -188,12 +179,9 @@ const Raffle: NextPage = () => {
 
     useEffect(() => {
 
-        console.log("isFinal: ", isFinal);
-
         if (participants.length > 0) {
-            localStorage.setItem("deletedFolios", JSON.stringify([]));
             setState({...state, numParticipants: participants.length});
-            runInterval(20);
+            runInterval(20, 0);
         }
 
     } ,[]);
@@ -202,43 +190,36 @@ const Raffle: NextPage = () => {
     const handleReplayClick = async () => {
         //delete winner from participants
 
-        if(localStorage.getItem("deletedFolios") !== null) {
-            let temp = JSON.parse(localStorage.getItem("deletedFolios")!);
-            temp.push(state.winnerFolio);
-            localStorage.setItem("deletedFolios", JSON.stringify(temp));
+        if(localStorage.getItem("deletedNames") !== null) {
+            let temp = JSON.parse(localStorage.getItem("deletedNames")!);
+            temp.push(state.winnerName);
+            localStorage.setItem("deletedNames", JSON.stringify(temp));
         } else {
-            localStorage.setItem("deletedFolios", JSON.stringify([state.winnerFolio]));
+            localStorage.setItem("deletedNames", JSON.stringify([state.winnerName]));
         }
-        if(state.winnerFinal === 1) {
-            console.log("final: ", isFinal)
-            if(isFinal){
-                if(state.times == 4){
-                    setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 5, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 3});
-                } else {
-                    console.log("reseting..");
-                    setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 1});
-                }
-            } else {
-                setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 3});
-            }
-        } else {
-            setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 1});
-        }
+        //console.log(state.times)
+        setState({...state, winnerStatus: 0, winnerName: "", winnerFinal: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 1});
         setSlow(false);
-        runInterval(20);
+        runInterval(20, state.times-1);
     }
 
     /* Handle replay raffle with all participans */
     const handleReplayAllClick = () => {
-        localStorage.setItem("deletedFolios", JSON.stringify([]));
-        setState({...state, winnerStatus: 0, winnerFolio: "", winnerFinal: 0, times: 0, numParticipants: participants.length, animationIteration: state.animationIteration + 3});
+        if(localStorage.getItem("deletedNames") !== null) {
+            let temp = JSON.parse(localStorage.getItem("deletedNames")!);
+            temp.push(state.winnerName);
+            localStorage.setItem("deletedNames", JSON.stringify(temp));
+        } else {
+            localStorage.setItem("deletedNames", JSON.stringify([state.winnerName]));
+        }
+
+        setState({...state, winnerStatus: 0, winnerName: "", winnerFinal: 0, numParticipants: state.numParticipants - 1, animationIteration: state.animationIteration + 1});
         setSlow(false);
-        runInterval(20);
+        runInterval(20, state.times);
     }
 
 
     const variants = {
-
         fast: {
             rotate: [0, 360],
             transition: {
@@ -280,16 +261,21 @@ const Raffle: NextPage = () => {
             <div className={styles.card__container}>
                 <div>
                     {/* Winner title */}
-                    {state.winnerFinal === 1 && (
-                        <h2 className={styles.winner__title}>¡GANADOR!</h2>
+                    {state.winnerStatus === 1 && (
+                        <h2 className={styles.winner__title}>¡{places[state.times-1]} Lugar!</h2>
                     )}
 
                     {/* name */}
                     <h1 className={styles.name}>{name.toUpperCase()}</h1>
 
                     {/* Folio */}
-                    <h2 className={styles.folio}>{folio}</h2>
-                    <p className={styles.folio2}>FOLIO</p>
+                    {state.winnerStatus === 1 && (
+                        <>
+                            <h2 className={styles.folio}>{points_lst[state.times-1]}</h2>
+                            <p className={styles.folio2}>MOBIL® coins</p>
+                        </>
+                        
+                    )}
                 </div>
             </div>
 
@@ -304,16 +290,18 @@ const Raffle: NextPage = () => {
                 {/* action buttons */}
                 {state.winnerStatus === 1 && (
                     <div className={styles.buttons}>
+                        {state.winnerFinal == 0 && (
+                            <Tooltip title="Repetir" placement="top">
+                                <img onClick={handleReplayClick} className={styles.icon__image} style={{marginRight: '10px'}} src="/img/redo_w.svg" alt="Redo without winner"/>
+                            </Tooltip>
+                        )}
 
-                        {/* <Image className={styles.icon__image} src={Redo} width={35} height={35}/> */}
-                        <Tooltip title="Repetir sin ganador" placement="top">
-                            <img onClick={handleReplayClick} className={styles.icon__image} style={{marginRight: '10px'}} src="/img/redo_w.svg" alt="Redo without winner"/>
-                        </Tooltip>
-
-                        {/* Replay with all participants */}
-                        <Tooltip title="Repetir con todos" placement="top">
-                            <img onClick={handleReplayAllClick} className={styles.icon__image} style={{marginRight: '10px'}} src="/img/redo.svg" alt='Redo all'/>
-                        </Tooltip>
+                        {state.winnerFinal == 0 && (
+                            <Tooltip title="Siguiente ganador" placement="top">
+                                <img onClick={handleReplayAllClick} className={styles.icon__image} style={{marginRight: '10px'}} src="/img/redo.svg" alt='Redo all'/>
+                            </Tooltip>
+                        )}
+                        
 
                         {/* Do another raffle */}
                         <Tooltip title="Otra rifa" placement="top">
