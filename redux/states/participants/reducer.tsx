@@ -8,7 +8,6 @@ import type { AppState } from '../../../redux/store';
 
 const initialState = {
     participants: 0,
-    inDropZone: false,
     isFinal: false,
 }
 

@@ -15,8 +15,7 @@ import Image1 from '../public/img/mobil1.png'
 import { 
   setDropDepth, 
   setInDropZone, 
-  setReduxParticipants,
-  setReduxIsFinal,
+  setReduxParticipants
 } from "../redux/actions"
 import { selectDropDepth } from "../redux/states/file/reducer"
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
@@ -68,9 +67,8 @@ const Home: NextPage = () => {
   /* redux - file */
   const dropDepth = useAppSelector(selectDropDepth) //function that allows to get the dropDepth from the redux state
 
-  /* UseEffect */
   useEffect(() => {
-    dispatch(setReduxIsFinal(false));
+    localStorage.setItem("deletedNames", JSON.stringify([]));
   },[])
 
   /* Functions - handle drag and drop */
@@ -119,11 +117,6 @@ const Home: NextPage = () => {
           type: String,
           required: true
         },
-        'folio': {
-          prop: 'folio',
-          type: String,
-          required: true
-        }
       }
 
 
@@ -197,11 +190,6 @@ const Home: NextPage = () => {
           type: String,
           required: true
         },
-        'folio': {
-          prop: 'folio',
-          type: String,
-          required: true
-        }
       }
 
 
@@ -297,9 +285,7 @@ const Home: NextPage = () => {
     setIntervalID(interval);
   }
 
-
   /* Alert messages functions */
-
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
@@ -312,12 +298,6 @@ const Home: NextPage = () => {
     })
   };
 
-
-  /* Handle switch change */
-  const handleSwitchChange = () => {
-    dispatch(setReduxIsFinal(!state.isFinal));
-    setState({ ...state, isFinal: !state.isFinal });
-  };
 
   return (
     <div>
@@ -341,7 +321,7 @@ const Home: NextPage = () => {
 
                   {/* title */}
                   <div className={styles.margin__div}>
-                    <h1 className={styles.title}>Lubricantes Mobil® y tú, un dúo ganador</h1>
+                    <h1 className={styles.title}>Reto NORA</h1>
                     <p className={styles.text}>(.XLSX)</p>
                   </div>
 
@@ -372,17 +352,6 @@ const Home: NextPage = () => {
                   <p>{number}</p>
                 </div>
 
-                {/* Switch (Final) */}
-                <div className={styles.switch}>
-                  <FormGroup aria-label="position" row>
-                    <FormControlLabel
-                      value="top"
-                      control={<Switch color="primary" value={state.isFinal} onChange={handleSwitchChange} />}
-                      label="Final"
-                      labelPlacement="top"
-                    />
-                  </FormGroup>
-                </div>
                 {/* button */}
                 <div>
                   <Link href="/raffle">
