@@ -362,19 +362,17 @@ const Home: NextPage = () => {
           )}
 
           {/* Logo image */}
-          <div className={styles.logo__container}>
+          {/* <div className={styles.logo__container}>
               <Image src={Logo} width={100} height={30}/>
           </div>
 
-          {/* Image 1 */}
           <div className={styles.image__container1}>
               <Image src={Image1} width={400} height={120}/>
           </div>
 
-          {/* Image 2 */}
           <div className={styles.image__container2}>
               <Image src={Image1} width={400} height={120}/>
-          </div>
+          </div> */}
 
         </div>
       </main>
