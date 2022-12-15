@@ -65,7 +65,7 @@
   width: 350px;
   height: 350px;
   border-radius: 50%;
-  background: linear-gradient(160.9deg, rgb(52 205 240 / 50%) 5%, rgb(9 34 149 / 37%) 30.09%, rgb(15 42 142 / 50%) 70%, rgb(62 204 222 / 50%) 94.02%);
+  background: linear-gradient(160.9deg, rgba(52, 205, 240, 0.05)5%, rgba(52, 205, 240, 0.25) 30.09%, rgba(52, 205, 240, 0.25) 70%, rgba(52, 205, 240, 0.05) 94.02%);
   position: absolute;
   top: 50%;
   left: 50%;
