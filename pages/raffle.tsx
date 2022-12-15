@@ -315,19 +315,17 @@ const Raffle: NextPage = () => {
             </div>
 
             {/* Logo image */}
-            <div className={styles.logo__container}>
+            {/* <div className={styles.logo__container}>
                 <Image src={Logo} width={100} height={30}/>
             </div>
 
-            {/* Image 1 */}
             <div className={styles.image__container1}>
                 <Image src={Image1} width={300} height={100}/>
             </div>
 
-            {/* Image 2 */}
             <div className={styles.image__container2}>
                 <Image src={Image1} width={300} height={100}/>
-            </div>
+            </div> */}
             
         </div>
 
