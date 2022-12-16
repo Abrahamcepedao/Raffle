@@ -106,13 +106,13 @@
 /* image 1 */
 .image__container1 {
     position: absolute;
-    bottom: 0px;
-    left: 0px;
+    bottom: 40px;
+    left: 30px;
 }
 
 /* image 2 */
 .image__container2 {
     position: absolute;
-    bottom: 0px;
-    right: 0px;
+    bottom: 40px;
+    right: 30px;
 }
