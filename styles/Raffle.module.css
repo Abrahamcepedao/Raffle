@@ -65,7 +65,7 @@
   width: 350px;
   height: 350px;
   border-radius: 50%;
-  background: linear-gradient(160.9deg, rgba(52, 205, 240, 0.05)5%, rgba(52, 205, 240, 0.25) 30.09%, rgba(52, 205, 240, 0.25) 70%, rgba(52, 205, 240, 0.05) 94.02%);
+  //background: linear-gradient(160.9deg, rgba(52, 205, 240, 0.05)5%, rgba(52, 205, 240, 0.25) 30.09%, rgba(52, 205, 240, 0.25) 70%, rgba(52, 205, 240, 0.05) 94.02%);
   position: absolute;
   top: 50%;
   left: 50%;
@@ -127,14 +127,14 @@
 /* actions container */
 .actions__container {
     position: absolute;
-    bottom: 10px;
+    bottom: 40px;
     width: 650px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .person__icon {
-  font-size: 60px !important;
+  font-size: 40px !important;
 }
 .person__icon, .icon__container p, .icon {
   color: rgba(245, 245, 245, 0.85);
@@ -151,7 +151,7 @@
 .icon__container p {
   margin: auto;
   margin-left: 5px;
-  font-size: 50px;
+  font-size: 40px;
   font-family: 'EMprint';
   font-weight: bold;
 }
@@ -165,7 +165,7 @@
 }
 .icon__image {
   cursor: pointer;
-  width: 35px;
+  width: 30px;
   opacity: 0.85;
   transition: transform 450ms;
 }
@@ -185,15 +185,13 @@
 /* image 1 */
 .image__container1 {
     position: absolute;
-    bottom: 10px;
-    left: 0px;
-    //width: 100px;
+    bottom: 40px;
+    left: 30px;
 }
 
 /* image 2 */
 .image__container2 {
     position: absolute;
-    bottom: 10px;
-    right: 0px;
-    //width: 100px;
+    bottom: 40px;
+    right: 30px;
 }
