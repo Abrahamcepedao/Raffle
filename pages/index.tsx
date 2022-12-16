@@ -8,8 +8,9 @@ import Head from 'next/head'
 import Link from 'next/link'
 import FileButton from '../components/FileButton'
 import Image from 'next/image'
-import Logo from '../public/img/mobil_logo.png'
-import Image1 from '../public/img/mobil1.png'
+//import Logo from '../public/img/mobil_logo.png'
+import Text from '../public/img/texto.png'
+import Logos from '../public/img/logos.png'
 
 /* Redux */
 import { 
@@ -364,15 +365,15 @@ const Home: NextPage = () => {
           {/* Logo image */}
           {/* <div className={styles.logo__container}>
               <Image src={Logo} width={100} height={30}/>
-          </div>
+          </div> */}
 
           <div className={styles.image__container1}>
-              <Image src={Image1} width={400} height={120}/>
+              <Image src={Text} width={200} height={40}/>
           </div>
 
           <div className={styles.image__container2}>
-              <Image src={Image1} width={400} height={120}/>
-          </div> */}
+              <Image src={Logos} width={290} height={36}/>
+          </div>
 
         </div>
       </main>
