@@ -49,7 +49,8 @@ const Raffle: NextPage = () => {
     //const places = ["5°", "4°", "3°", "2°", "1°"]
     const places = ["3°", "2°", "1°"]
     //const points_lst = [215, 425, 765, 1150, 1700]
-    const points_lst = [765, 1150, 1700]
+    //const points_lst = [765, 1150, 1700]
+    const points_lst = ["Ganaste una experiencia + televisión Samsung 85\"", "Ganaste un viaje para 2 personas a hotel Xcaret todo incluido", "Ganaste una moto BMW G310GS"]
 
     /* Redux */
     const participants = useAppSelector(selectParticipants) //function that allows to get the Participants from the redux state
@@ -274,8 +275,8 @@ const Raffle: NextPage = () => {
                     {/* Folio */}
                     {state.winnerStatus === 1 && (
                         <>
-                            <h2 className={styles.folio}>{points_lst[state.times-1]}</h2>
-                            <p className={styles.folio2}>MOBIL® coins</p>
+                            <h2 className={styles.folio2}>{points_lst[state.times-1]}</h2>
+                            {/* <p className={styles.folio2}>MOBIL® coins</p> */}
                         </>
                         
                     )}
