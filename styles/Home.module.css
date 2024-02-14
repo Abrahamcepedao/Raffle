@@ -27,7 +27,8 @@
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  background: linear-gradient(160.9deg, rgba(52, 205, 240, 0.05)5%, rgba(52, 205, 240, 0.25) 30.09%, rgba(52, 205, 240, 0.25) 70%, rgba(52, 205, 240, 0.05) 94.02%);
+  //background: linear-gradient(160.9deg, rgba(52, 205, 240, 0.05)5%, rgba(52, 205, 240, 0.25) 30.09%, rgba(52, 205, 240, 0.25) 70%, rgba(52, 205, 240, 0.05) 94.02%);
+  background: linear-gradient(160.9deg, rgb(217 44 19 / 5%)5%, rgb(240 52 52 / 25%) 30.09%, rgb(230 107 52 / 25%) 70%, rgb(240 63 52 / 5%) 94.02%);
   border-radius: 50%;
   text-align: center;
   font-style: italic;

@@ -31,13 +31,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow:
+    /* box-shadow:
             0 0 .2rem #fff,
             inset 0 0 .2rem #fff,
             0 0 1rem #08f,
             inset 0 0 1rem #08f,
             0 0 1rem #08f,
-            inset 0 0 1rem #08f
+            inset 0 0 1rem #08f */
+    box-shadow: 0 0 0.2rem #fff, inset 0 0 0.2rem #fff, 0 0 1rem #f00, inset 0 0 1rem #f00, 0 0 1rem #a61818, inset 0 0 1rem #f00;
 }
 .ball {
     position: absolute;
@@ -84,13 +85,14 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    box-shadow:
+    /* box-shadow:
             0 0 .5rem #fff,
             inset 0 0 .5rem #fff,
             0 0 1rem #08f,
             inset 0 0 2rem #08f,
             0 0 1rem #08f,
-            inset 0 0 2rem #08f;
+            inset 0 0 2rem #08f; */
+    box-shadow: 0 0 0.2rem #fff, inset 0 0 0.2rem #fff, 0 0 1rem #f00, inset 0 0 1rem #f00, 0 0 1rem #a61818, inset 0 0 1rem #f00;
     border-radius: 10px;
     text-align: center;
 }
@@ -105,7 +107,8 @@
 
 .name, .folio, .folio2 {
     color: white;
-    opacity: 0.4;
+    //opacity: 0.4;
+    opacity: 0.75;
     text-shadow: -2px 2px 0.2rem #000;
 }
 
