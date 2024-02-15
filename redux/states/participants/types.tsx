@@ -4,3 +4,4 @@
 
 export const SET_PARTICIPANTS = 'SET_PARTICIPANTS'
 export const SET_IS_FINAL = 'SET_IS_FINAL'
+export const SET_NUM_PRIZE = 'SET_NUM_PRIZE'

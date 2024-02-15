@@ -21,3 +21,12 @@ export const setReduxIsFinal = (isFinal: boolean) => {
     payload: isFinal
   };
 }
+
+//Function that sets the numPrizes
+export const setReduxNumPrize = (numPrizes: number) => {
+  console.log("setReduxNumPrize====> ", numPrizes);
+  return { 
+    type: t.SET_NUM_PRIZE, 
+    payload: numPrizes
+  };
+}

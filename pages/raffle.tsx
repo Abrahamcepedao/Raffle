@@ -13,7 +13,7 @@ import Image from 'next/image'
 //import Logos from '../public/img/logos.png'
 
 /* Redux */
-import { selectParticipants, selectIsFinal } from "../redux/states/participants/reducer"
+import { selectParticipants, selectIsFinal, selectNumPrize } from "../redux/states/participants/reducer"
 import { useAppSelector } from '../redux/hooks'
 import { Participant } from '../redux/states/participants/interfaces'
 
@@ -46,14 +46,20 @@ const Raffle: NextPage = () => {
     const [intervalID, setIntervalID] = useState<number>(0);
     const [slow, setSlow] = useState<boolean>(false);
 
+    //useState - numPrize
+    const [numPrize, setNumPrize] = useState<number>(3);
+
     //const places = ["5°", "4°", "3°", "2°", "1°"]
-    const places = ["3°", "2°", "1°"]
+    //const places = ["3°", "2°", "1°"]
+    const places = ["1°", "2°", "3°"]
     //const points_lst = [215, 425, 765, 1150, 1700]
     //const points_lst = [765, 1150, 1700]
-    const points_lst = ["Ganaste una experiencia + televisión Samsung 85\"", "Ganaste un viaje para 2 personas a hotel Xcaret todo incluido", "Ganaste una moto BMW G310GS"]
+    //const points_lst = ["Ganaste una experiencia + televisión Samsung 85\"", "Ganaste un viaje para 2 personas a hotel Xcaret todo incluido", "Ganaste una moto BMW G310GS"]
+    const points_lst = ["Ganaste una moto BMW G310GS", "Ganaste un viaje para 2 personas a hotel Xcaret todo incluido",  "Ganaste una experiencia + televisión Samsung 80\""]
 
     /* Redux */
     const participants = useAppSelector(selectParticipants) //function that allows to get the Participants from the redux state
+    const reduxNumPrize = useAppSelector(selectNumPrize) //function that allows to get the numPrizes from the redux state (1, 2, 3)
 
     /* Shuffle array */
     function shuffle(array: []) {
@@ -99,13 +105,14 @@ const Raffle: NextPage = () => {
                 if(num === final) {
                     index = index + 1;
                     setName(temp[index].nombre);
-                    console.log(times_temp)
-                    if(times_temp < 2){
+                    //cambiar este valor para definir cuantas veces debe girar
+                    let num_times = 0;
+                    if(times_temp < num_times){
                         setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 0, winnerName: temp[index].nombre, times: times_temp + 1});
                     } else {
                         setState({...state, numParticipants: temp.length, winnerStatus: 1, winnerFinal: 1, winnerName: temp[index].nombre, times: times_temp + 1});
                     }
-                    
+                    console.log("numPrize: ", numPrize);
                     
                     stop = true;
                     clearInterval(intervalID);
@@ -182,12 +189,18 @@ const Raffle: NextPage = () => {
     
 
     useEffect(() => {
+        //setNumPrize with localstorage
+        if (localStorage.getItem("numPrize") !== null) {
+            console.log("numPrize", localStorage.getItem("numPrize")!);
+            setNumPrize(parseInt(localStorage.getItem("numPrize")!));
+        } else {
+            setNumPrize(3);
+        }
 
         if (participants.length > 0) {
             setState({...state, numParticipants: participants.length});
             runInterval(20, 0);
         }
-
     } ,[]);
 
     /* Handle replay raffle without winner */
@@ -265,8 +278,11 @@ const Raffle: NextPage = () => {
             <div className={styles.card__container}>
                 <div>
                     {/* Winner title */}
-                    {state.winnerStatus === 1 && (
+                    {/* {state.winnerStatus === 1 && (
                         <h2 className={styles.winner__title}>¡{places[state.times-1]} Lugar!</h2>
+                    )} */}
+                    {state.winnerStatus === 1 && (
+                        <h2 className={styles.winner__title}>¡{places[numPrize-1]} Lugar!</h2>
                     )}
 
                     {/* name */}
@@ -275,7 +291,8 @@ const Raffle: NextPage = () => {
                     {/* Folio */}
                     {state.winnerStatus === 1 && (
                         <>
-                            <h2 className={styles.folio2}>{points_lst[state.times-1]}</h2>
+                            <h2 className={styles.folio2}>{points_lst[numPrize-1]}</h2>
+                            {/* <h2 className={styles.folio2}>{points_lst[state.times-1]}</h2> */}
                             {/* <p className={styles.folio2}>MOBIL® coins</p> */}
                         </>
                         

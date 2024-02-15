@@ -9,6 +9,7 @@ import type { AppState } from '../../../redux/store';
 const initialState = {
     participants: 0,
     isFinal: false,
+    numPrize: 3 // 1, 2, 3
 }
 
 const reducer = (state = initialState, action:any) => {
@@ -24,6 +25,11 @@ const reducer = (state = initialState, action:any) => {
         ...state,
         isFinal: action.payload
       };
+    case t.SET_NUM_PRIZE:
+      return {
+        ...state,
+        numPrizes: action.payload
+      };
       
     default:
       return {...state};
@@ -32,5 +38,6 @@ const reducer = (state = initialState, action:any) => {
 
 export const selectParticipants = (state: AppState) => state.participantsState.participants
 export const selectIsFinal = (state: AppState) => state.participantsState.isFinal
+export const selectNumPrize = (state: AppState) => state.participantsState.numPrize
 
 export default reducer;

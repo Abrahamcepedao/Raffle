@@ -8,6 +8,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import FileButton from '../components/FileButton'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 //import Logo from '../public/img/mobil_logo.png'
 //import Text from '/img/texto.png'
 //import Logos from '/img/logos.png'
@@ -16,7 +17,8 @@ import Image from 'next/image'
 import { 
   setDropDepth, 
   setInDropZone, 
-  setReduxParticipants
+  setReduxParticipants,
+  setReduxNumPrize
 } from "../redux/actions"
 import { selectDropDepth } from "../redux/states/file/reducer"
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
@@ -48,6 +50,8 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 
 
 const Home: NextPage = () => {
+  //router
+  const router = useRouter();
 
   /* useState - upload */
   const [state, setState] = useState({
@@ -63,6 +67,9 @@ const Home: NextPage = () => {
   const [number, setNumber] = useState<number>(0);
   const [intervalID, setIntervalID] = useState<number>(0);
 
+  //useState - input number
+  const [inputNumber, setInputNumber] = useState<number | string>('');
+
    /* Redux */
   const dispatch = useAppDispatch(); //function that allows to trigger actions that update the redux state
   /* redux - file */
@@ -71,6 +78,18 @@ const Home: NextPage = () => {
   useEffect(() => {
     localStorage.setItem("deletedNames", JSON.stringify([]));
   },[])
+
+  //handle input number change
+  const handleInputNumberChange = (e: any) => {
+    let val = e.target.value;
+    //verify if the input is a number between 1 and 3
+    if(isNaN(val)) return;
+    if((val > 3 || val < 1) && val !== '') return;
+    console.log('val: ', val);
+    setInputNumber(val);
+    dispatch(setReduxNumPrize(val));
+    localStorage.setItem("numPrize", val);
+  }
 
   /* Functions - handle drag and drop */
   const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
@@ -300,6 +319,37 @@ const Home: NextPage = () => {
   };
 
 
+  //handle play click
+  const handlePlayClick = () => {
+    //verify the input number is valid (1-3) and it exists in local storage
+    //verify that inputNumber is a number
+    if(isNaN(inputNumber as number)) {
+      setState({
+        ...state,
+        open: true,
+        error: "El número de premios tiene que ser un número",
+        severity: "error"
+      });
+      return;
+    } else if((inputNumber as number) < 1 || (inputNumber as number) > 3) {
+      setState({
+        ...state,
+        open: true,
+        error: "El número de premios tiene que estar entre 1 y 3",
+        severity: "error"
+      });
+      return;
+    }
+
+    //verify that the input number exists in local storage
+    if(localStorage.getItem("numPrize") === null) {
+      localStorage.setItem("numPrize", inputNumber as string);
+    }
+
+    router.push('/raffle');
+    
+  }
+
   return (
     <div>
       <Head>
@@ -353,11 +403,23 @@ const Home: NextPage = () => {
                   <p>{number}</p>
                 </div>
 
+                {/* input of type text */}
+                <div className={styles.margin__div}>
+                    <input
+                      type='text'
+                      value={inputNumber}
+                      onChange={handleInputNumberChange}
+                      className={styles.input__number}
+                      placeholder='1/2/3'
+                    />
+                </div>
+
                 {/* button */}
                 <div>
-                  <Link href="/raffle">
+                  {/* <Link href="/raffle">
                     <button className={styles.start__button}><p>COMENZAR</p></button>
-                  </Link>
+                  </Link> */}
+                  <button className={styles.start__button} onClick={handlePlayClick}><p>COMENZAR</p></button>
                 </div>
               </div>
           )}

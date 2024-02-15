@@ -74,6 +74,19 @@
 }
 
 
+/* input number */
+.input__number {
+  width: 100px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  padding-left: 10px;
+  color: black;
+  background: white;
+}
+
 /* switch */
 /* Start button */
 .start__button {
