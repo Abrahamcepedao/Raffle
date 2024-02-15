@@ -85,7 +85,7 @@ const Raffle: NextPage = () => {
     let stop = false;
     //@ts-ignore
     let interval;
-    let final = Math.floor(Math.random() * participants.length) + (participants.length);
+    let final = Math.floor(Math.random() * participants.length) + (participants.length > 10 ? participants.length : participants.length * 10)
 
 
     const slowInterval = (temp:Participant[], times_temp:number) => {
@@ -103,8 +103,9 @@ const Raffle: NextPage = () => {
                 
                 num = num + 1;
                 if(num === final) {
-                    index = index + 1;
+                    index = index === temp.length - 1 ? 0 : index + 1;
                     setName(temp[index].nombre);
+                    
                     //cambiar este valor para definir cuantas veces debe girar
                     let num_times = 0;
                     if(times_temp < num_times){
@@ -119,12 +120,14 @@ const Raffle: NextPage = () => {
                     //@ts-ignore
                     clearInterval(interval);
                     interval = null;
-                } else if(index < (temp.length-2)) {
-                    index = index + 1;
+                } else if(index < (temp.length-1)) {
+                    
                     setName(temp[index].nombre);
+                    index = index + 1;
                 } else {
-                    index = index + 1;
+                    
                     setName(temp[index].nombre);
+                    index = index + 1;
                     index = 0;
                 }
             } else {
@@ -159,7 +162,8 @@ const Raffle: NextPage = () => {
         interval = setInterval(() => {
             if(!stop){
                 num = num + 1;
-                if(num === (final - 5))  {
+                console.log("num y final= ", num, final);
+                if(num >= (final - 5))  {
                     setSlow(true);
                     stop = true;
 
@@ -169,12 +173,12 @@ const Raffle: NextPage = () => {
                     interval = null;
                     slowInterval(temp, times_temp);
                 }
-                else if(index < (temp.length-2)) {
-                    index = index + 1;
+                else if(index < (temp.length-1)) {
                     setName(temp[index].nombre);
+                    index = index + 1;
                 } else {
-                    index = index + 1;
                     setName(temp[index].nombre);
+                    index = index + 1;
                     index = 0;
                 }
             } else {
@@ -199,7 +203,7 @@ const Raffle: NextPage = () => {
 
         if (participants.length > 0) {
             setState({...state, numParticipants: participants.length});
-            runInterval(20, 0);
+            runInterval(100, 0);
         }
     } ,[]);
 
