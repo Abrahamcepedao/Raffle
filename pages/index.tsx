@@ -269,8 +269,10 @@ const Home: NextPage = () => {
         dispatch(setReduxParticipants(results.data));
 
         let num = 0;
+        setNumber(results.data.length);
 
-        const interval: any = setInterval(() => {
+        /* const interval: any = setInterval(() => {
+            console.log('num: ', num, results.data.length);
             if(num === results.data.length) {
               clearInterval(intervalID);
             } else {
@@ -280,7 +282,7 @@ const Home: NextPage = () => {
 
         }, 10)
 
-        setIntervalID(interval);
+        setIntervalID(interval); */
       },
     });
   }
@@ -291,8 +293,10 @@ const Home: NextPage = () => {
     dispatch(setReduxParticipants(participants));
 
     let num = 0;
+    setNumber(participants.length);
 
-    const interval: any = setInterval(() => {
+    /* const interval: any = setInterval(() => {
+        console.log('num: ', num, participants.length);
         if(num === participants.length) {
           clearInterval(intervalID);
         } else {
@@ -302,7 +306,7 @@ const Home: NextPage = () => {
 
     }, 10)
 
-    setIntervalID(interval);
+    setIntervalID(interval); */
   }
 
   /* Alert messages functions */
